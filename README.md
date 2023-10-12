@@ -15,7 +15,7 @@ Welcome to our Plumber Game implementation in Java. This project was developed b
 
 # Project Contributors
 - Essmay Touami (22313891)
-Dounia Benyakhlaf ()
+- Dounia Benyakhlaf ()
 
 # Project Description
 The Plumber Game is a classic puzzle game where players are presented with a grid of pipe segments with the goal of connecting them to create a path for water to flow from the source to the drain. The game features different levels with increasing complexity, and the challenge lies in strategically placing the pipes to form a complete connection while adhering to the game rules.
