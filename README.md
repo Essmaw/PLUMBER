@@ -1,5 +1,5 @@
 # Plumber Game 👨‍🔧
-Bienvenue dans le projet Plumber Game, un jeu captivant où vous devez résoudre des énigmes de tuyauterie pour connecter tous les tuyaux à la source d'eau ! 
+Bienvenue dans Plumber Game, un jeu captivant où vous devez résoudre des énigmes de tuyauterie pour connecter tous les tuyaux à la source d'eau ! 
 
 ## Description
 Le projet Plumber consiste en la création d'une application Java utilisant la bibliothèque Swing pour jouer au jeu vidéo "Plumber". Le jeu est jouable entièrement à la souris, avec des rotations de tuyaux pour connecter chaque tuyau à la source d'eau. Les configurations de niveau sont stockées dans des fichiers texte.
