@@ -29,7 +29,7 @@ Le projet Plumber consiste en la création d'une application Java utilisant la b
 
 1. Cloner le répertoire :
 ```bash
-git clone https://github.com/essmay-dounia/plumber-game-java.git
+git clone https://github.com/uvsq22004047/PLUMBER.git
 ```
 
 2. Naviguer vers le répertoire du projet :
