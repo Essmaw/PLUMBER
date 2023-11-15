@@ -51,8 +51,11 @@ java Main
 
 ## Règles du Jeu
 Le jeu se déroule sur un damier rectangulaire avec des tuyaux. 
+
 L'objectif est de connecter tous les tuyaux à la source d'eau centrale en effectuant des rotations. 
+
 Les configurations de niveau sont définies dans des fichiers texte, et le joueur peut interagir avec les tuyaux en utilisant la souris. 
+
 Le jeu détecte automatiquement si le joueur a gagné et propose de passer au niveau suivant ou de revenir à l'écran d'accueil si le niveau actuel est le dernier.
 
 
