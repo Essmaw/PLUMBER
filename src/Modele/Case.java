@@ -15,6 +15,6 @@ public class Case {
 	// FONCTIONS
 	void rotation() {this.orientation= (this.orientation + 1) % 4;}
 	
-	void allumer() {this.est_allume = true;}
+	void setAllumer(boolean allumer) {this.est_allume = allumer;}
 	
 }

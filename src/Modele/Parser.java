@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Scanner;
 
 public class Parser {
+	
 	static Case[][] lire(String nom_fichier){
 		File f = null; 
 		try {
@@ -11,17 +12,29 @@ public class Parser {
 			Scanner sc = new Scanner(f);
 			int hauteur = sc.nextInt();
 			int largeur = sc.nextInt();
-			
 			Case[][] matrice = new Case[hauteur][largeur];
+			int pos_ligne = 0;
 			for(int i=0; i<hauteur; i++) {
-				for(int j =0; j<largeur; j++) {
-					
+				for(int j=0; j<largeur; j++) {
+					if(! sc.hasNext()) {
+						System.out.println("Le fichier n'a pas le bon format.");
+						System.exit(1);
+					}
+					String entree = sc.next();
+					Tuyau  t = Tuyau.stringToTuyau(entree.charAt(0));
+					int rotation = entree.charAt(1)-'0';
+					if( rotation > 3 || rotation < 0) {
+						System.out.println("Le fichier n'a pas le bon format.");
+						System.exit(1);
+					}
+					Case nvl_case = new Case(t, rotation);
+					matrice[i][j] = nvl_case;
 				}
-				
 			}
-			
+			return matrice;
 		}
 		catch(Exception e){
+			System.out.println("Le fichier n'a pas été ouvert.");
 			System.exit(1);		
 		}
 		return null;
