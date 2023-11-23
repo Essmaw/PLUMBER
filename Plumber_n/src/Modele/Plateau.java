@@ -20,27 +20,12 @@ public class Plateau {
 	}
 	
 	//Allumage intial à partir de la source
-	void initSource() {
-		Case source = plateau[hauteur/2][largeur/2]; //on recupere la case contenant le tuyau source
-		source.setAllumer(true);
-		for(Dir dir : Dir.values()) {
-			if(source.tuyau.estOuvert(dir, Dir.values()[source.orientation])){
-				int xVoisin = hauteur/2 + Dir.di[dir.ordinal()];
-				int yVoisin = largeur/2 + Dir.dj[dir.ordinal()];
-				//regarder si case dans le plateau
-				if(xVoisin > 0 && xVoisin < hauteur && yVoisin > 0 && yVoisin < largeur) {
-					Case voisine = plateau[xVoisin][yVoisin]; //recupere case voisine
-					//regarder si case pas allumee et source connecte avec case voisine dans direction dir
-					if(! voisine.est_allume && source.estConnecte(voisine, dir)) {
-						propagation(xVoisin, yVoisin, dir); //propager le signal
-					}
-				}
-			}
-		}
+	void initSource() { 
+		//on commence la propagation sur le tuyau source
+		propagation(hauteur/2, largeur/2);
 	}
 	
-	//enlever la direction Dir dirSortie et appeler directement sur les coordonnees voisine pour eviter repetition de code
-	void propagation(int x, int y, Dir dirSortie) { 
+	void propagation(int x, int y) { 
 		Case courante = plateau[x][y]; //recupere case voisine
 		courante.setAllumer(true); // on allume la case courante car appel a propagation que si pas allume
 		for(Dir dir : Dir.values()) {
@@ -48,11 +33,11 @@ public class Plateau {
 				int xVoisin = x + Dir.di[dir.ordinal()];
 				int yVoisin = y + Dir.dj[dir.ordinal()];
 				//regarder si case dans le plateau
-				if(xVoisin > 0 && xVoisin < hauteur && yVoisin > 0 && yVoisin < largeur) {
+				if(xVoisin >= 0 && xVoisin < hauteur && yVoisin >= 0 && yVoisin < largeur) {
 					Case voisine = plateau[xVoisin][yVoisin]; //recupere case voisine
 					//regarder si case pas allumee et source connecte avec case voisine dans direction dir
 					if(! voisine.est_allume && courante.estConnecte(voisine, dir)) {
-						propagation(xVoisin, yVoisin, dir); //propager le signal
+						propagation(xVoisin, yVoisin); //propager le signal
 					}
 				}
 			}
@@ -62,15 +47,14 @@ public class Plateau {
 	void rotation(int x, int y) {
 		this.plateau[x][y].orientation = (this.plateau[x][y].orientation + 1)%4;
 		//eteindre toutes les cases 
-		//et on recalcul avec propagation
+		for(Case[] ligne : plateau) {
+			for(Case casePlateau : ligne) {
+				casePlateau.setAllumer(false);
+			}
+		}
+		//et on recalcule la propagation a partir de la source
+		this.initSource();
 	}
-	
-	//il faut aussi éteindre si plus connecte
-	void allumer() {
-		// pareil
-	}
-	
-	boolean est_connecte(int x1, int y1, int x2, int y2) {return false;}
 	
 	void rotation_aleatoire() {
 		Random r = new Random();
@@ -115,14 +99,18 @@ public class Plateau {
 		System.out.println(p);
 		
 		//rotation aléatoire 
-		p.rotation_aleatoire();
+		//p.rotation_aleatoire();
+		//System.out.println(p);
+		
+		//propagation a partir de la source pour initaliser
+		p.initSource();
 		System.out.println(p);
 		
+		
 		//rotation d'un tuyau
-		p.rotation(0, 0);
-		p.rotation(3, 1);
-		p.rotation(2, 2);
+		p.rotation(2, 1);
 		System.out.println(p);
+		
 		
 	}
 	
