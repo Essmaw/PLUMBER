@@ -70,6 +70,8 @@ public class Plateau {
 	public static void main(String[] arg) {
 		//initialisation du plateau
 		Plateau p = new Plateau();
+		
+		//!\ bien choisir le workspace pour rendre le chemin vers les fic de niveau universel
 		p.plateau = Parser.lire("/home/dounia/PLUMBER_Project/src/Fichier/pipe1.p");
 		p.hauteur = p.plateau.length;
 		p.largeur = p.plateau[0].length;
