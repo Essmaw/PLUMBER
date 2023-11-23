@@ -72,7 +72,7 @@ public class Plateau {
 		Plateau p = new Plateau();
 		
 		//!\ bien choisir le workspace pour rendre le chemin vers les fic de niveau universel
-		p.plateau = Parser.lire("/home/dounia/PLUMBER_Project/src/Fichier/pipe1.p");
+		p.plateau = Parser.lire("Fichier/pipe1.p");
 		p.hauteur = p.plateau.length;
 		p.largeur = p.plateau[0].length;
 		System.out.println(p);
