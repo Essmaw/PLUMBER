@@ -19,13 +19,50 @@ public class Plateau {
 		return true;
 	}
 	
+	//Allumage intial à partir de la source
+	void initSource() {
+		Case source = plateau[hauteur/2][largeur/2]; //on recupere la case contenant le tuyau source
+		source.setAllumer(true);
+		for(Dir dir : Dir.values()) {
+			if(source.tuyau.estOuvert(dir, Dir.values()[source.orientation])){
+				int xVoisin = hauteur/2 + Dir.di[dir.ordinal()];
+				int yVoisin = largeur/2 + Dir.dj[dir.ordinal()];
+				//regarder si case dans le plateau
+				if(xVoisin > 0 && xVoisin < hauteur && yVoisin > 0 && yVoisin < largeur) {
+					Case voisine = plateau[xVoisin][yVoisin]; //recupere case voisine
+					//regarder si case pas allumee et source connecte avec case voisine dans direction dir
+					if(! voisine.est_allume && source.estConnecte(voisine, dir)) {
+						propagation(xVoisin, yVoisin, dir); //propager le signal
+					}
+				}
+			}
+		}
+	}
 	
-	void propagation() {
-		// pas rempli parce que dunia...
+	//enlever la direction Dir dirSortie et appeler directement sur les coordonnees voisine pour eviter repetition de code
+	void propagation(int x, int y, Dir dirSortie) { 
+		Case courante = plateau[x][y]; //recupere case voisine
+		courante.setAllumer(true); // on allume la case courante car appel a propagation que si pas allume
+		for(Dir dir : Dir.values()) {
+			if(courante.tuyau.estOuvert(dir, Dir.values()[courante.orientation])){
+				int xVoisin = x + Dir.di[dir.ordinal()];
+				int yVoisin = y + Dir.dj[dir.ordinal()];
+				//regarder si case dans le plateau
+				if(xVoisin > 0 && xVoisin < hauteur && yVoisin > 0 && yVoisin < largeur) {
+					Case voisine = plateau[xVoisin][yVoisin]; //recupere case voisine
+					//regarder si case pas allumee et source connecte avec case voisine dans direction dir
+					if(! voisine.est_allume && courante.estConnecte(voisine, dir)) {
+						propagation(xVoisin, yVoisin, dir); //propager le signal
+					}
+				}
+			}
+		}
 	}
 
 	void rotation(int x, int y) {
 		this.plateau[x][y].orientation = (this.plateau[x][y].orientation + 1)%4;
+		//eteindre toutes les cases 
+		//et on recalcul avec propagation
 	}
 	
 	//il faut aussi éteindre si plus connecte

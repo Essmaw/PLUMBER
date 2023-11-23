@@ -14,6 +14,10 @@ public enum Dir {
 		return this.rotation(-nbr);
 	}
 	
+	Dir oppose() {
+		return this.rotation(2);
+	}
+	
 	Dir rotation (Dir dir) {
 		return Dir.values()[(((this.ordinal() + dir.ordinal()) % 4) + 4) % 4];
 	}
