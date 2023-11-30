@@ -10,38 +10,25 @@ public class Plateau {
 		
 	// FONCTIONS 
 	
-	//----------------------------------------------VOIR AVEC PROF SI SUPPRIMER---------------------------------------------
-	//appeler sur la source
-	boolean existeFuite() {
-		return existeFuite(hauteur/2, largeur/2);
-	}
-	
-	boolean existeFuite(int i, int j) {
-		Case courante = plateau[i][j]; //recupere case voisine
-		for(Dir dir : Dir.values()) {
-			if(courante.tuyau.estOuvert(dir, Dir.values()[courante.orientation])){
-				int iVoisin = i + Dir.di[dir.ordinal()];
-				int jVoisin = j + Dir.dj[dir.ordinal()];
-				//regarder si case dans le plateau
-				if(iVoisin >= 0 && iVoisin < hauteur && jVoisin >= 0 && jVoisin < largeur) {
-					Case voisine = plateau[iVoisin][jVoisin]; //recupere case voisine
-					//si pas connecte avec case voisine dans direction dir alors fuite
-					if(!courante.estConnecte(voisine, dir)) {
-						return true;
-					}
-					else existeFuite(iVoisin, jVoisin);
-				}
-			}
-		}
-		return false;
-	}
-	
-	//------------------------------------------------------------------------------------------------------------------
-	
 	boolean est_gagnant() {
 		for(int i=0; i < hauteur; i++) {
 			for(int j=0; j < largeur; j++) { 
-				if(this.plateau[i][j].est_allume == false) return false;
+				Case courante = plateau[i][j]; //recupere case voisine
+				for(Dir dir : Dir.values()) {
+					if(courante.tuyau.estOuvert(dir, Dir.values()[courante.orientation])){
+						int iVoisin = i + Dir.di[dir.ordinal()];
+						int jVoisin = j + Dir.dj[dir.ordinal()];
+						//regarder si case dans le plateau
+						if(iVoisin >= 0 && iVoisin < hauteur && jVoisin >= 0 && jVoisin < largeur) {
+							Case voisine = plateau[iVoisin][jVoisin]; //recupere case voisine
+							//regarder si case pas allumee et source connecte avec case voisine dans direction dir
+							if(! courante.estConnecte(voisine, dir)) {
+								return false; //fuite
+							}
+						}//si pas dans plateau alors fuite en dehors plateau
+						else return false;
+					}
+				}
 			}
 		}
 		return true;
@@ -122,6 +109,7 @@ public class Plateau {
 		
 		//!\ bien choisir le workspace pour rendre le chemin vers les fic de niveau universel
 		p.plateau = Parser.lire("Fichier/pipe1.p");
+		//p.plateau = Parser.lire("Fichier/pipe2.p"); //test config ou tout allume mais fuite
 		p.hauteur = p.plateau.length;
 		p.largeur = p.plateau[0].length;
 		System.out.println(p);
@@ -137,9 +125,9 @@ public class Plateau {
 		
 		
 		//rotation d'un tuyau
-		p.rotation(2, 1);
-		System.out.println(p);
-		System.out.println(p.est_gagnant());
+		//p.rotation(3, 1);
+		//System.out.println(p);
+		//System.out.println(p.est_gagnant());
 		
 	}
 	
