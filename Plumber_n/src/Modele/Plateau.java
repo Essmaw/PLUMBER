@@ -9,10 +9,38 @@ public class Plateau {
 	int hauteur;
 		
 	// FONCTIONS 
-	//Attention verifier que pas de fuite aussi
+	
+	//----------------------------------------------VOIR AVEC PROF SI SUPPRIMER---------------------------------------------
+	//appeler sur la source
+	boolean existeFuite() {
+		return existeFuite(hauteur/2, largeur/2);
+	}
+	
+	boolean existeFuite(int i, int j) {
+		Case courante = plateau[i][j]; //recupere case voisine
+		for(Dir dir : Dir.values()) {
+			if(courante.tuyau.estOuvert(dir, Dir.values()[courante.orientation])){
+				int iVoisin = i + Dir.di[dir.ordinal()];
+				int jVoisin = j + Dir.dj[dir.ordinal()];
+				//regarder si case dans le plateau
+				if(iVoisin >= 0 && iVoisin < hauteur && jVoisin >= 0 && jVoisin < largeur) {
+					Case voisine = plateau[iVoisin][jVoisin]; //recupere case voisine
+					//si pas connecte avec case voisine dans direction dir alors fuite
+					if(!courante.estConnecte(voisine, dir)) {
+						return true;
+					}
+					else existeFuite(iVoisin, jVoisin);
+				}
+			}
+		}
+		return false;
+	}
+	
+	//------------------------------------------------------------------------------------------------------------------
+	
 	boolean est_gagnant() {
-		for(int i=0; i < largeur; i++) {
-			for(int j=0; j < hauteur; j++) { 
+		for(int i=0; i < hauteur; i++) {
+			for(int j=0; j < largeur; j++) { 
 				if(this.plateau[i][j].est_allume == false) return false;
 			}
 		}
@@ -25,27 +53,27 @@ public class Plateau {
 		propagation(hauteur/2, largeur/2);
 	}
 	
-	void propagation(int x, int y) { 
-		Case courante = plateau[x][y]; //recupere case voisine
+	void propagation(int i, int j) { 
+		Case courante = plateau[i][j]; //recupere case voisine
 		courante.setAllumer(true); // on allume la case courante car appel a propagation que si pas allume
 		for(Dir dir : Dir.values()) {
 			if(courante.tuyau.estOuvert(dir, Dir.values()[courante.orientation])){
-				int xVoisin = x + Dir.di[dir.ordinal()];
-				int yVoisin = y + Dir.dj[dir.ordinal()];
+				int iVoisin = i + Dir.di[dir.ordinal()];
+				int jVoisin = j + Dir.dj[dir.ordinal()];
 				//regarder si case dans le plateau
-				if(xVoisin >= 0 && xVoisin < hauteur && yVoisin >= 0 && yVoisin < largeur) {
-					Case voisine = plateau[xVoisin][yVoisin]; //recupere case voisine
+				if(iVoisin >= 0 && iVoisin < hauteur && jVoisin >= 0 && jVoisin < largeur) {
+					Case voisine = plateau[iVoisin][jVoisin]; //recupere case voisine
 					//regarder si case pas allumee et source connecte avec case voisine dans direction dir
 					if(! voisine.est_allume && courante.estConnecte(voisine, dir)) {
-						propagation(xVoisin, yVoisin); //propager le signal
+						propagation(iVoisin, jVoisin); //propager le signal
 					}
 				}
 			}
 		}
 	}
 
-	void rotation(int x, int y) {
-		this.plateau[x][y].orientation = (this.plateau[x][y].orientation + 1)%4;
+	void rotation(int i, int j) {
+		this.plateau[i][j].orientation = (this.plateau[i][j].orientation + 1)%4;
 		//eteindre toutes les cases 
 		for(Case[] ligne : plateau) {
 			for(Case casePlateau : ligne) {
@@ -105,12 +133,13 @@ public class Plateau {
 		//propagation a partir de la source pour initaliser
 		p.initSource();
 		System.out.println(p);
+		System.out.println(p.est_gagnant());
 		
 		
 		//rotation d'un tuyau
 		p.rotation(2, 1);
 		System.out.println(p);
-		
+		System.out.println(p.est_gagnant());
 		
 	}
 	
