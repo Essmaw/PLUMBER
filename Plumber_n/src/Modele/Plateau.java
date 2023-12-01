@@ -14,6 +14,7 @@ public class Plateau {
 		for(int i=0; i < hauteur; i++) {
 			for(int j=0; j < largeur; j++) { 
 				Case courante = plateau[i][j]; //recupere case voisine
+				if(!courante.est_allume) return false;
 				for(Dir dir : Dir.values()) {
 					if(courante.tuyau.estOuvert(dir, Dir.values()[courante.orientation])){
 						int iVoisin = i + Dir.di[dir.ordinal()];
