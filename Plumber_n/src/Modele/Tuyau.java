@@ -28,7 +28,7 @@ public enum Tuyau {
 		return t;
 	}
 	
-	static String tuyauToString(Tuyau t) {
+	public static String tuyauToString(Tuyau t) {
 		int t_ord = t.ordinal();
 		String tuyau_str;
 		switch(t_ord) {

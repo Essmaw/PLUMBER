@@ -9,7 +9,11 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 
-public class Case extends JPanel implements MouseInputListener{
+import Controleur.Controleur;
+
+public class VueCase extends JPanel implements MouseInputListener{
+	private int posX;//position sur le plateau
+	private int posY;//position sur le plateau
 	private final int width;
 	private final int height;
 	private BufferedImage image;
@@ -18,11 +22,15 @@ public class Case extends JPanel implements MouseInputListener{
 	private int rotation;
 	private Graphismes graph;
 	private Graphics context_graph; //obligatoire?
+	private Controleur controleur;
 	
-	Case(int w, int h, int ligne, int col, int rotation){
+	public VueCase(int w, int h, int ligne, int col, int rotation, int posX, int posY, Controleur c){
+		this.controleur = c;
+		this.posX = posX;
+		this.posY = posY;
 		this.width = w;
 		this.height = h;
-		this.graph = new Graphismes(w, h, "pipes.png", 3, 5, 120, 20);
+		this.graph = new Graphismes(w, h, "pipes.png", 3, 5, 120, 20); //3 lignes et 5 colonnes dans l'image pipes.png
 		//reglage des dimensions du panneau
 		this.setPreferredSize(new Dimension(w, h));
 		
@@ -45,26 +53,28 @@ public class Case extends JPanel implements MouseInputListener{
 		return this.context_graph;
 	}
 	
-	public void effacer() {
-		this.context_graph.clearRect(0, 0, this.width, this.height);
-		repaint();
-	}
-	
-	public void setImage(BufferedImage image) {
-		this.image = image;
-		repaint();
-	}
-	
 	protected void paintComponent(Graphics g) {
 		g.clearRect(0, 0, this.width, this.height);
+		g.drawImage(this.graph.getTuyau(2, 0, 0), 0, 0, this.width, this.height, this);
 		g.drawImage(this.image, 0, 0, this.width, this.height, this);
+	}
+	
+	public void miseAJour() {
+		if(this.controleur.estAllume(this.posX, this.posY)) this.ligne = 1;
+		else this.ligne = 0;
+		this.image = graph.getTuyau(ligne, colonne, rotation);
+		repaint();
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		this.context_graph.setColor(Color.BLACK);
 		this.rotation = (this.rotation + 1)%4;
+		this.controleur.rotation(this.posX, this.posY);
+		if(this.controleur.estAllume(this.posX, this.posY)) this.ligne = 1;
+		else this.ligne = 0;
 		this.image = graph.getTuyau(ligne, colonne, rotation);
+		this.controleur.propagation();
 		repaint();
 	}
 

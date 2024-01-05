@@ -7,10 +7,34 @@ public class Plateau {
 	Case[][] plateau;
 	int largeur;
 	int hauteur;
+	
+	//CONSTRUCTEUR
+	public Plateau() {}
+	
+	public Plateau(Case[][] plateau) {
+		this.plateau = plateau;
+		this.hauteur = plateau.length;
+		this.largeur = plateau[0].length;
+		this.rotation_aleatoire();
+		this.initSource();
+	}
 		
+	//ACCESSEURS
+	public Case[][] getPlateau(){
+		return this.plateau;
+	}
+	
+	public int getLargeur() {
+		return this.largeur;
+	}
+	
+	public int getHauteur() {
+		return this.hauteur;
+	}
+	
 	// FONCTIONS 
 	
-	boolean est_gagnant() {
+	public boolean estGagnant() {
 		for(int i=0; i < hauteur; i++) {
 			for(int j=0; j < largeur; j++) { 
 				Case courante = plateau[i][j]; //recupere case voisine
@@ -36,12 +60,12 @@ public class Plateau {
 	}
 	
 	//Allumage intial à partir de la source
-	void initSource() { 
+	public void initSource() { 
 		//on commence la propagation sur le tuyau source
 		propagation(hauteur/2, largeur/2);
 	}
 	
-	void propagation(int i, int j) { 
+	public void propagation(int i, int j) { 
 		Case courante = plateau[i][j]; //recupere case voisine
 		courante.setAllumer(true); // on allume la case courante car appel a propagation que si pas allume
 		for(Dir dir : Dir.values()) {
@@ -60,7 +84,7 @@ public class Plateau {
 		}
 	}
 
-	void rotation(int i, int j) {
+	public void rotation(int i, int j) {
 		this.plateau[i][j].orientation = (this.plateau[i][j].orientation + 1)%4;
 		//eteindre toutes les cases 
 		for(Case[] ligne : plateau) {
@@ -72,7 +96,7 @@ public class Plateau {
 		this.initSource();
 	}
 	
-	void rotation_aleatoire() {
+	public void rotation_aleatoire() {
 		Random r = new Random();
 		for(Case[] ligne : this.plateau) {
 			for(Case c : ligne) {
@@ -122,7 +146,7 @@ public class Plateau {
 		//propagation a partir de la source pour initaliser
 		p.initSource();
 		System.out.println(p);
-		System.out.println(p.est_gagnant());
+		System.out.println(p.estGagnant());
 		
 		
 		//rotation d'un tuyau

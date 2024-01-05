@@ -12,6 +12,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Modele.Tuyau;
+
 public class Graphismes extends JPanel {
     private final int width;
     private final int height;
@@ -70,11 +72,24 @@ public class Graphismes extends JPanel {
 		 * paintComponent en lui passant comme argument un point d'accès
 		 * aux pixels de la fenêtre.
 		 */
-		repaint();
+		//repaint();
     }
     
     public BufferedImage getTuyau(int ligne, int colonne, int rotation){
     	return this.sprites[ligne][colonne][rotation];
+    }
+    
+    public static int TuyauToColonne(char tuyau) {
+    	int col;
+		switch(tuyau) {
+			case 'E' : col = 0; break;
+			case 'L' : col = 1; break;
+			case 'T' : col = 2;	break;
+			case 'F' : col = 3; break;
+			case 'C' : col = 4; break;
+			default : col = -1;
+		}
+		return col;
     }
 
 //    

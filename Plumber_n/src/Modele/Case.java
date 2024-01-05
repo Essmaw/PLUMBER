@@ -11,6 +11,19 @@ public class Case {
 		this.tuyau = tuyau;
 		this.orientation = orientation ;
 	}
+	
+	// ACCESSEURS
+	public boolean getEstAllume() {
+		return this.est_allume;
+	}
+	
+	public Tuyau getTuyau() {
+		return this.tuyau;
+	}
+	
+	public int getOrientation() {
+		return this.orientation;
+	}
 		
 	// FONCTIONS
 	void rotation() {this.orientation= (this.orientation + 1) % 4;}

@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Parser {
 	
-	static Case[][] lire(String nom_fichier){
+	public static Case[][] lire(String nom_fichier){
 		File f = null; 
 		try {
 			f = new File(nom_fichier);
