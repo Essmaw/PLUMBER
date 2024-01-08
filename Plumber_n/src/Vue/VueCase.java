@@ -65,6 +65,11 @@ public class VueCase extends JPanel implements MouseInputListener{
 		this.image = graph.getTuyau(ligne, colonne, rotation);
 		repaint();
 	}
+	
+	public void rendreNonCliquable() {
+        // Désenregistrer le JPanel en tant que listener des événements de souris
+        removeMouseListener(getMouseListeners()[0]);
+    }
 
 	@Override
 	public void mouseClicked(MouseEvent e) {

@@ -2,13 +2,18 @@ package Controleur;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
+import java.awt.Insets;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import Modele.Parser;
 import Modele.Plateau;
@@ -24,10 +29,10 @@ public class Controleur {
 	private JPanel vuePlateau;
 	private Plateau modelePlateau;
 	
-	public Controleur(VuePlateau vue, JPanel vuePlateau, String ficNiveau) {
+	public Controleur(VuePlateau vue, JPanel vuePlateau, String ficNiveau, boolean aleatoire) {
 		this.vue = vue;
 		this.vuePlateau = vuePlateau;
-		this.modelePlateau = new Plateau(Parser.lire("Fichier/pipe1.p"));
+		this.modelePlateau = new Plateau(Parser.lire(ficNiveau), aleatoire);
 		
 		this.vuePlateau.setLayout(new GridLayout(this.modelePlateau.getHauteur(), this.modelePlateau.getLargeur()));
 		for(int i = 0; i<this.modelePlateau.getHauteur(); i++) {
@@ -51,15 +56,80 @@ public class Controleur {
 		this.modelePlateau.rotation(i, j);
 		this.vue.setBackground(Color.black);
 		if(this.estGagnant()) {
-			this.vue.setBackground(Color.pink);
-			JLabel titre = new JLabel("BRAVO ! VOUS AVEZ GAGNÉ !!!!!");
-			titre.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-			titre.setHorizontalAlignment(JLabel.CENTER);
+//			this.vue.removeAll();
+//			this.vue.revalidate();
+//			this.vue.repaint();
+//			
+//			JLabel titre = new JLabel("VOUS AVEZ GAGNÉ !!!");
+//			Font font = new Font("Helvetica", Font.BOLD, 19); 
+//			titre.setFont(font);
+//			titre.setHorizontalAlignment(JLabel.CENTER);
+//
+//			GridBagConstraints gbc = new GridBagConstraints();
+//			gbc.fill = GridBagConstraints.HORIZONTAL;
+//			gbc.gridx = 0;
+//			gbc.gridy = 0; // Changer gridy à 0 pour placer le label en haut
+//			this.vue.add(titre, gbc);
+//
+//			// Ajouter un espace vertical (par exemple, un espace de 10 pixels) entre le label et le plateau
+//			gbc.gridy = 1;
+//			gbc.insets = new Insets(10, 0, 0, 0);
+//			this.vue.add(Box.createVerticalStrut(10), gbc);
+//
+//			// Ajouter le plateau au milieu
+//			gbc.gridy = 2;
+//			this.vue.add(this.vuePlateau, gbc);
+//			
+//			this.vue.revalidate();
+//			this.vue.repaint();
+			//////////////////////////////////////////////
+			this.vue.removeAll();
+			this.vue.revalidate();
+			this.vue.repaint();
+			
+			JPanel barre = this.vue.creerBarreGagne();
+
 			GridBagConstraints gbc = new GridBagConstraints();
 			gbc.fill = GridBagConstraints.HORIZONTAL;
-	        gbc.gridx = 0;
-	        gbc.gridy = 1;
-	        this.vue.add(titre, gbc);
+			gbc.gridx = 0;
+			gbc.gridy = 0; // Changer gridy à 0 pour placer le label en haut
+			this.vue.add(barre, gbc);
+			
+			JLabel titre = new JLabel("VOUS AVEZ GAGNÉ !!!");
+			Font font = new Font("Helvetica", Font.BOLD, 19); 
+			titre.setForeground(Color.WHITE);
+			titre.setFont(font);
+			titre.setHorizontalAlignment(JLabel.CENTER);
+			
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			gbc.gridy = 1;
+			this.vue.add(titre, gbc);
+			
+			// Ajouter un espace vertical (par exemple, un espace de 10 pixels) entre le label et le plateau
+			gbc.gridy = 2;
+			JPanel espace = new JPanel();
+			espace.setBackground(Color.black);
+			espace.setPreferredSize(new Dimension(1060, (900-30-titre.getHeight()-this.vuePlateau.getHeight())/4));
+			this.vue.add(espace, gbc);
+
+			// Ajouter le plateau au milieu
+			gbc.gridy = 3;
+			this.vue.add(this.vuePlateau, gbc);
+			
+			this.vue.revalidate();
+			this.vue.repaint();
+			
+			//////////////////////////////////////////////
+			
+			SwingUtilities.invokeLater(() -> {
+				for (int k = 0; k < this.modelePlateau.getHauteur()*this.modelePlateau.getLargeur(); k++) {
+	        	    ((VueCase) this.vuePlateau.getComponent(k)).rendreNonCliquable();
+	        	}
+				
+				this.vue.revalidate();
+				this.vue.repaint();
+			});
+			
 		}
 	}
 	

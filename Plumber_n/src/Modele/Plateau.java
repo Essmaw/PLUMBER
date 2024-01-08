@@ -11,11 +11,13 @@ public class Plateau {
 	//CONSTRUCTEUR
 	public Plateau() {}
 	
-	public Plateau(Case[][] plateau) {
+	public Plateau(Case[][] plateau, boolean aleatoire) {
 		this.plateau = plateau;
 		this.hauteur = plateau.length;
 		this.largeur = plateau[0].length;
-		this.rotation_aleatoire();
+		if(aleatoire) {
+			this.rotation_aleatoire();
+		}
 		this.initSource();
 	}
 		
