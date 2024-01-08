@@ -56,33 +56,6 @@ public class Controleur {
 		this.modelePlateau.rotation(i, j);
 		this.vue.setBackground(Color.black);
 		if(this.estGagnant()) {
-//			this.vue.removeAll();
-//			this.vue.revalidate();
-//			this.vue.repaint();
-//			
-//			JLabel titre = new JLabel("VOUS AVEZ GAGNÉ !!!");
-//			Font font = new Font("Helvetica", Font.BOLD, 19); 
-//			titre.setFont(font);
-//			titre.setHorizontalAlignment(JLabel.CENTER);
-//
-//			GridBagConstraints gbc = new GridBagConstraints();
-//			gbc.fill = GridBagConstraints.HORIZONTAL;
-//			gbc.gridx = 0;
-//			gbc.gridy = 0; // Changer gridy à 0 pour placer le label en haut
-//			this.vue.add(titre, gbc);
-//
-//			// Ajouter un espace vertical (par exemple, un espace de 10 pixels) entre le label et le plateau
-//			gbc.gridy = 1;
-//			gbc.insets = new Insets(10, 0, 0, 0);
-//			this.vue.add(Box.createVerticalStrut(10), gbc);
-//
-//			// Ajouter le plateau au milieu
-//			gbc.gridy = 2;
-//			this.vue.add(this.vuePlateau, gbc);
-//			
-//			this.vue.revalidate();
-//			this.vue.repaint();
-			//////////////////////////////////////////////
 			this.vue.removeAll();
 			this.vue.revalidate();
 			this.vue.repaint();
