@@ -87,7 +87,6 @@ public class VueNiveaux extends JPanel {
         	frame.getContentPane().repaint();
 
         	// Ajouter un nouveau composant VuePlateau au contentPane
-        	System.out.println("Fichier/pipe" + niveau + ".p");
         	VuePlateau plateau = new VuePlateau(this.niveau, "Fichier/pipe" + niveau + ".p", this.frame);
         	frame.getContentPane().add(plateau);
 

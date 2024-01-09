@@ -34,6 +34,7 @@ public class VuePlateau extends JPanel{
 		this.frame = frame;
 		this.ficNiveau = ficNiveau;
 		this.plateau = new JPanel();
+		plateau.setBackground(Color.black);
 		this.setBackground(Color.black);
 		
 		this.setPreferredSize(new Dimension(1060, 900));
@@ -50,7 +51,7 @@ public class VuePlateau extends JPanel{
 		//gbc.insets = new Insets(10, 0, 0, 0);
 		JPanel espace = new JPanel();
 		espace.setBackground(Color.black);
-		espace.setPreferredSize(new Dimension(1060, (900-30-plateau.getHeight())/4));
+		espace.setPreferredSize(new Dimension(1060, (900-30-plateau.getHeight())/8));
 		this.add(espace, gbc);
 
 		// Ajouter le plateau au milieu
@@ -147,7 +148,6 @@ public JPanel creerBarreGagne() {
 			ActionListener l3 = new ActionListener() {
 				public void actionPerformed (ActionEvent e) {
 					// code de la reponse a une action.
-					System.out.println("Niveau suivant");
 					suivant();
 				}
 			};
@@ -192,7 +192,7 @@ public JPanel creerBarreGagne() {
 		//gbc.insets = new Insets(10, 0, 0, 0);
 		JPanel espace = new JPanel();
 		espace.setBackground(Color.black);
-		espace.setPreferredSize(new Dimension(1060, (900-30-plateau.getHeight())/4));
+		espace.setPreferredSize(new Dimension(1060, (900-30-plateau.getHeight())/8));
 		this.add(espace, gbc);
 
 		// Ajouter le plateau au milieu
@@ -224,7 +224,7 @@ public JPanel creerBarreGagne() {
 		//gbc.insets = new Insets(10, 0, 0, 0);
 		JPanel espace = new JPanel();
 		espace.setBackground(Color.black);
-		espace.setPreferredSize(new Dimension(1060, (900-30-plateau.getHeight())/4));
+		espace.setPreferredSize(new Dimension(1060, (900-30-plateau.getHeight())/8));
 		this.add(espace, gbc);
 
 		// Ajouter le plateau au milieu
@@ -257,7 +257,7 @@ public JPanel creerBarreGagne() {
 		//gbc.insets = new Insets(10, 0, 0, 0);
 		JPanel espace = new JPanel();
 		espace.setBackground(Color.black);
-		espace.setPreferredSize(new Dimension(1060, (900-30-plateau.getHeight())/4));
+		espace.setPreferredSize(new Dimension(1060, (900-30-plateau.getHeight())/8));
 		this.add(espace, gbc);
 
 		// Ajouter le plateau au milieu

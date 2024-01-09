@@ -19,7 +19,7 @@ public class Graphismes extends JPanel {
     private final int height;
     
     // couleur de fond d'une tuile
-    static final Color tileBackground = new Color(210, 210, 210);
+    static final Color tileBackground = Color.black;
 	
     /* banque de sprites :
      *   pour chaque ligne de l'image de base,
@@ -58,8 +58,7 @@ public class Graphismes extends JPanel {
 				    AffineTransform t = new AffineTransform();
 				    t.setToQuadrantRotation(r, size/2, size/2);
 				    // création de l'image cible
-				    sprites[i][j][r] = new BufferedImage
-					(size, size, BufferedImage.TYPE_INT_ARGB);
+				    sprites[i][j][r] = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
 				    // g2 : point d'accès à ses pixels.
 				    Graphics2D g2 = (Graphics2D) sprites[i][j][r].getGraphics();
 				    // copie de la sous-image dans l'image cible, en lui
@@ -72,7 +71,7 @@ public class Graphismes extends JPanel {
 		 * paintComponent en lui passant comme argument un point d'accès
 		 * aux pixels de la fenêtre.
 		 */
-		//repaint();
+		repaint();
     }
     
     public BufferedImage getTuyau(int ligne, int colonne, int rotation){
@@ -92,12 +91,12 @@ public class Graphismes extends JPanel {
 		return col;
     }
 
-//    
-//    protected void paintComponent(Graphics g) {
-//		// effacement du fond par remplissage
-//		g.setColor(Color.BLACK);
+    
+    protected void paintComponent(Graphics g) {
+		// effacement du fond par remplissage
+		g.setColor(Color.BLACK);
 //		g.fillRect(0,  0, width, height);
-//		
+		
 //		// exemple d'affichage "en dur" :
 //		int i = 0, j = 0;
 //		
@@ -130,8 +129,8 @@ public class Graphismes extends JPanel {
 //		 */
 //		//g2.drawImage(sprites[2][0][0], t, null);	
 //		g2.drawImage(sprites[1][3][1], t, null);
-//    }
-//
+    }
+
 //    public static void main(String[] args) {
 //		// création de la fenêtre principale
 //		JFrame frame = new JFrame();

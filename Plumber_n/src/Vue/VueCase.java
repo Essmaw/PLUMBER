@@ -21,7 +21,7 @@ public class VueCase extends JPanel implements MouseInputListener{
 	private int ligne;
 	private int rotation;
 	private Graphismes graph;
-	private Graphics context_graph; //obligatoire?
+	private Graphics context_graph;
 	private Controleur controleur;
 	
 	public VueCase(int w, int h, int ligne, int col, int rotation, int posX, int posY, Controleur c){
@@ -33,6 +33,8 @@ public class VueCase extends JPanel implements MouseInputListener{
 		this.graph = new Graphismes(w, h, "pipes.png", 3, 5, 120, 20); //3 lignes et 5 colonnes dans l'image pipes.png
 		//reglage des dimensions du panneau
 		this.setPreferredSize(new Dimension(w, h));
+		
+		this.setBackground(Color.black);
 		
 		this.ligne = ligne;
 		this.colonne = col;
@@ -48,14 +50,19 @@ public class VueCase extends JPanel implements MouseInputListener{
 		repaint();
 	}
 	
-	//necessaire?
+	public int getPosX() {
+		return this.posX;
+	}
+	
 	public Graphics getImageGraphics() {
 		return this.context_graph;
 	}
 	
 	protected void paintComponent(Graphics g) {
 		g.clearRect(0, 0, this.width, this.height);
-		g.drawImage(this.graph.getTuyau(2, 0, 0), 0, 0, this.width, this.height, this);
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, this.width, this.height);
+		if(this.posX != -1) g.drawImage(this.graph.getTuyau(2, 0, 0), 0, 0, this.width, this.height, this);
 		g.drawImage(this.image, 0, 0, this.width, this.height, this);
 	}
 	
@@ -73,14 +80,16 @@ public class VueCase extends JPanel implements MouseInputListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		this.context_graph.setColor(Color.BLACK);
-		this.rotation = (this.rotation + 1)%4;
-		this.controleur.rotation(this.posX, this.posY);
-		if(this.controleur.estAllume(this.posX, this.posY)) this.ligne = 1;
-		else this.ligne = 0;
-		this.image = graph.getTuyau(ligne, colonne, rotation);
-		this.controleur.propagation();
-		repaint();
+		if(this.posX != -1) {
+			this.context_graph.setColor(Color.BLACK);
+			this.rotation = (this.rotation + 1)%4;
+			this.controleur.rotation(this.posX, this.posY);
+			if(this.controleur.estAllume(this.posX, this.posY)) this.ligne = 1;
+			else this.ligne = 0;
+			this.image = graph.getTuyau(ligne, colonne, rotation);
+			this.controleur.propagation();
+			repaint();
+		}
 	}
 
 	@Override

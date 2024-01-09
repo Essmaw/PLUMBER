@@ -34,8 +34,20 @@ public class Controleur {
 		this.vuePlateau = vuePlateau;
 		this.modelePlateau = new Plateau(Parser.lire(ficNiveau), aleatoire);
 		
-		this.vuePlateau.setLayout(new GridLayout(this.modelePlateau.getHauteur(), this.modelePlateau.getLargeur()));
+		remplissagePlateau();
+	}
+	
+	public void remplissagePlateau() {
+		this.vuePlateau.setLayout(new GridLayout(this.modelePlateau.getHauteur()+2, this.modelePlateau.getLargeur()+2));
+		
+		this.vuePlateau.add(new VueCase(80, 80, 2, 1, 0, -1, -1, this)); //-1 valeur par defaut
+		for(int i=0; i<this.modelePlateau.getLargeur(); i++) {
+			this.vuePlateau.add(new VueCase(80, 80, 2, 2, 0, -1, -1, this)); //-1 valeur par defaut
+		}
+		this.vuePlateau.add(new VueCase(80, 80, 2, 1, 1, -1, -1, this));
+		
 		for(int i = 0; i<this.modelePlateau.getHauteur(); i++) {
+			this.vuePlateau.add(new VueCase(80, 80, 2, 2, 3, -1, -1, this)); //-1 valeur par defaut
 			for(int j =0; j<this.modelePlateau.getLargeur(); j++) {
 				Case c = this.modelePlateau.getPlateau()[i][j];
 				char tuyau = Tuyau.tuyauToString(c.getTuyau()).charAt(0);
@@ -44,7 +56,14 @@ public class Controleur {
 				if(c.getEstAllume()) ligne = 1;
 				this.vuePlateau.add(new VueCase(80, 80, ligne, Graphismes.TuyauToColonne(tuyau), rotation, i, j, this));
 			}
+			this.vuePlateau.add(new VueCase(80, 80, 2, 2, 1, -1, -1, this));
 		}
+		
+		this.vuePlateau.add(new VueCase(80, 80, 2, 1, 3, -1, -1, this)); //-1 valeur par defaut
+		for(int i=0; i<this.modelePlateau.getLargeur(); i++) {
+			this.vuePlateau.add(new VueCase(80, 80, 2, 2, 2, -1, -1, this)); //-1 valeur par defaut
+		}
+		this.vuePlateau.add(new VueCase(80, 80, 2, 1, 2, -1, -1, this));
 	}
 	
 	public boolean estGagnant() {
@@ -92,13 +111,13 @@ public class Controleur {
 			this.vue.revalidate();
 			this.vue.repaint();
 			
-			//////////////////////////////////////////////
-			
 			SwingUtilities.invokeLater(() -> {
-				for (int k = 0; k < this.modelePlateau.getHauteur()*this.modelePlateau.getLargeur(); k++) {
-	        	    ((VueCase) this.vuePlateau.getComponent(k)).rendreNonCliquable();
+				for (int k = 0; k < (this.modelePlateau.getHauteur()+2)*(this.modelePlateau.getLargeur()+2); k++) {
+					VueCase c = (VueCase) this.vuePlateau.getComponent(k);
+					if(c.getPosX() != -1) {
+						c.rendreNonCliquable();
+					}
 	        	}
-				
 				this.vue.revalidate();
 				this.vue.repaint();
 			});
@@ -115,7 +134,7 @@ public class Controleur {
 		Component[] components = this.vuePlateau.getComponents();
         for (int i = 0; i < components.length; i++) {
             VueCase c = ((VueCase)components[i]);
-            c.miseAJour();
+            if(c.getPosX() !=-1) c.miseAJour();
         }
 	}
 }
