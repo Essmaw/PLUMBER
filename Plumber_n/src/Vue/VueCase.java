@@ -77,9 +77,8 @@ public class VueCase extends JPanel implements MouseInputListener{
         // Désenregistrer le JPanel en tant que listener des événements de souris
         removeMouseListener(getMouseListeners()[0]);
     }
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
+	
+	public void caseRotation() {
 		if(this.posX != -1) {
 			this.context_graph.setColor(Color.BLACK);
 			this.rotation = (this.rotation + 1)%4;
@@ -90,6 +89,24 @@ public class VueCase extends JPanel implements MouseInputListener{
 			this.controleur.propagation();
 			repaint();
 		}
+	}
+	
+	public void caseRotationInverse() {
+		if(this.posX != -1) {
+			this.context_graph.setColor(Color.BLACK);
+			this.rotation = (this.rotation - 1 + 4)%4;
+			this.controleur.rotation(this.posX, this.posY);
+			if(this.controleur.estAllume(this.posX, this.posY)) this.ligne = 1;
+			else this.ligne = 0;
+			this.image = graph.getTuyau(ligne, colonne, rotation);
+			this.controleur.propagation();
+			repaint();
+		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		this.caseRotation();
 	}
 
 	@Override

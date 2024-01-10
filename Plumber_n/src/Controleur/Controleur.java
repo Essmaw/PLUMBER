@@ -47,6 +47,13 @@ public class Controleur {
 		remplissagePlateau();
 	}
 	
+	public Controleur(VuePlateau vue, JPanel vuePlateau, String ficNiveau, boolean aleatoire, Controleur c2) {
+		this.vue = vue;
+		this.vuePlateau = vuePlateau;
+		this.modelePlateau = c2.modelePlateau;
+		remplissagePlateau();
+	}
+	
 	public void remplissagePlateau() {
 		this.vuePlateau.setLayout(new GridLayout(this.modelePlateau.getHauteur()+2, this.modelePlateau.getLargeur()+2));
 		
@@ -91,6 +98,22 @@ public class Controleur {
 	    } else if (this.estGagnant() && niveau == 10) {
 	        afficherTrophee();
 	    }
+	}
+	
+	public int retour() {
+	    int [] pos = this.modelePlateau.retour();
+	    if(pos != null) {
+		    this.vue.setBackground(Color.black);
+		    int niveau = vue.getNiveau();
+		    
+		    //récuperer la case du plateau de la vue
+		    VueCase c = ((VueCase)this.vuePlateau.getComponentAt(pos[0]+1, pos[1]+1));
+		    
+		    //mettre a jour la case en appelant caseRotation sur celle-ci
+		    c.caseRotationInverse();
+		    return 1;
+	    }
+	    return -1;
 	}
 	
 	

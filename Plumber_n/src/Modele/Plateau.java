@@ -1,5 +1,6 @@
 package Modele;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Plateau {
@@ -7,6 +8,7 @@ public class Plateau {
 	Case[][] plateau;
 	int largeur;
 	int hauteur;
+	ArrayList<int[]> sauvegarde = new ArrayList<>(); //sauvegarde des positions des cases rotates
 	
 	//CONSTRUCTEUR
 	public Plateau() {}
@@ -96,6 +98,30 @@ public class Plateau {
 		}
 		//et on recalcule la propagation a partir de la source
 		this.initSource();
+		//on ajoute les positions de la cases dans sauvegarde
+		int[] pos = {i, j};
+		this.sauvegarde.add(pos);
+	}
+	
+	public int[] retour() {
+		int taille = this.sauvegarde.size();
+		if(taille > 0) {
+			int[] pos_prec = this.sauvegarde.get(taille-1);
+			this.sauvegarde.remove(taille-1);
+			
+			//rotation dans le sens inverse
+			this.plateau[pos_prec[0]][pos_prec[1]].orientation = (this.plateau[pos_prec[0]][pos_prec[1]].orientation - 1 + 4)%4;
+			//eteindre toutes les cases 
+			for(Case[] ligne : plateau) {
+				for(Case casePlateau : ligne) {
+					casePlateau.setAllumer(false);
+				}
+			}
+			//et on recalcule la propagation a partir de la source
+			this.initSource();
+			return pos_prec;
+		}
+		return null;
 	}
 	
 	public void rotation_aleatoire() {

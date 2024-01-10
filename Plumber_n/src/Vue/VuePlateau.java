@@ -96,6 +96,19 @@ public class VuePlateau extends JPanel{
 		};
 		menu.addActionListener(l2);
 		
+		//bouton retour 
+		JButton retour = new JButton("Retour");
+		retour.setFont(new Font("Arial", Font.PLAIN, 20));
+		barre.add(retour);
+		
+		ActionListener l4 = new ActionListener() {
+			public void actionPerformed (ActionEvent e) {
+				// code de la reponse a une action.
+				retour();
+			}
+		};
+		retour.addActionListener(l4);
+		
 		
 		JButton recommencer = new JButton("Recommencer");
 		recommencer.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -124,7 +137,7 @@ public class VuePlateau extends JPanel{
 		return barre;
 	}
 	
-public JPanel creerBarreGagne() {
+	public JPanel creerBarreGagne() {
 		int nbMaxNiveaux = 10;
 		JPanel barre = new JPanel();
 		
@@ -188,6 +201,54 @@ public JPanel creerBarreGagne() {
 		
     	Menu menu = new Menu(frame);
 	    frame.getContentPane().add(menu);
+	}
+	
+	public void retour() {
+		int r = this.controleur.retour();
+		
+		if(r == 1) {
+			this.plateau = new JPanel();
+			this.removeAll();
+			this.revalidate();
+			this.repaint();
+			
+			this.setBackground(Color.black);
+			
+			this.setPreferredSize(new Dimension(1060, 900));
+			JPanel barre = creerBarre();
+	
+			GridBagConstraints gbc = new GridBagConstraints();
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+			gbc.gridx = 0;
+			gbc.gridy = 0; // Changer gridy à 0 pour placer le label en haut
+			this.add(barre, gbc);
+	        
+			gbc.gridy = 1;
+		    JPanel espaceBarreNiveau = new JPanel();
+		    espaceBarreNiveau.setBackground(Color.black);
+		    espaceBarreNiveau.setPreferredSize(new Dimension(1060, 60));
+		    this.add(espaceBarreNiveau, gbc);
+		    
+			gbc.gridy = 2;
+	        JLabel niveauLabel = new JLabel("Niveau " + niveau);
+	        Font font = new Font("Helvetica", Font.BOLD, 30);
+	        niveauLabel.setForeground(Color.WHITE);
+	        niveauLabel.setFont(font);
+	        niveauLabel.setHorizontalAlignment(JLabel.CENTER);
+	        this.add(niveauLabel, gbc);
+	        
+	        //inserer espace
+			gbc.gridy = 1;
+			JPanel espace = new JPanel();
+			espace.setBackground(Color.black);
+			espace.setPreferredSize(new Dimension(1060, (900-30-plateau.getHeight())/8));
+			this.add(espace, gbc);
+	
+			// Ajouter le plateau au milieu
+			gbc.gridy = 1;
+			this.add(plateau, gbc);
+			this.controleur = new Controleur(this, this.plateau, ficNiveau, true, this.controleur);
+		}
 	}
 	
 	public void solution() {
