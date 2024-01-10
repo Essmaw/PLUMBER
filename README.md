@@ -9,28 +9,20 @@ Le projet Plumber consiste en la création d'une application Java utilisant la b
 ### Prérequis
 - Java 1.8 ou supérieur installé sur votre machine. [![Java Version](https://img.shields.io/badge/Java-1.8%2B-blue.svg)](https://www.java.com/en/download/)
 
+- Le projet a été réalisé avec Eclipse version 2023-09 (4.29.0) 
+
 ### Pour lancer le jeu :
 
-1. Cloner le répertoire :
+1. Télecharger l'archive `projet_plumber.tar` :
+
+2. désarchiver `projet_plumber.tar` :
 ```bash
-git clone https://github.com/uvsq22004047/PLUMBER.git
+tar -xvf fichier.tar
 ```
 
-2. Naviguer vers le répertoire du projet :
-```bash
-cd plumber-game-java
-```
+3. Lancer la projet sur Eclipse
 
-3. Compiler le projet :
-```bash
-javac vuePlateau.java
-```
-
-4. Exécuter l'application : 
-```bash
-java vuePlateau
-```
-
+4. Exécuter le projet (Run)
 
 ## Contributeurs
 - Essmay Touami (22313891)
