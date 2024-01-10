@@ -25,7 +25,7 @@ public class VueNiveaux extends JPanel {
         setLayout(new GridLayout(2, 5, 10, 10)); // 2 lignes, 5 colonnes avec un espacement de 10 pixels
         setBackground(Color.BLACK); // Fond noir
 
-        for (int i = 0; i <= 9; i++) {
+        for (int i = 1; i <= 10; i++) {
             JButton niveauButton = new JButton("Niveau " + i);
             niveauButton.setFont(new Font("Arial", Font.PLAIN, 14));
             niveauButton.setForeground(Color.WHITE);

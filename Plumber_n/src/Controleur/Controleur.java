@@ -1,15 +1,26 @@
 package Controleur;
 
 import java.awt.Color;
+
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Menu;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -33,7 +44,6 @@ public class Controleur {
 		this.vue = vue;
 		this.vuePlateau = vuePlateau;
 		this.modelePlateau = new Plateau(Parser.lire(ficNiveau), aleatoire);
-		
 		remplissagePlateau();
 	}
 	
@@ -72,57 +82,138 @@ public class Controleur {
 	
 	//rotate une tuile du plateau du modele (appelee lorsqu'on clique sur une case de la Vue (classe VueCase))
 	public void rotation(int i, int j) {
-		this.modelePlateau.rotation(i, j);
-		this.vue.setBackground(Color.black);
-		if(this.estGagnant()) {
-			this.vue.removeAll();
-			this.vue.revalidate();
-			this.vue.repaint();
-			
-			JPanel barre = this.vue.creerBarreGagne();
+	    this.modelePlateau.rotation(i, j);
+	    this.vue.setBackground(Color.black);
+	    int niveau = vue.getNiveau();
 
-			GridBagConstraints gbc = new GridBagConstraints();
-			gbc.fill = GridBagConstraints.HORIZONTAL;
-			gbc.gridx = 0;
-			gbc.gridy = 0; // Changer gridy à 0 pour placer le label en haut
-			this.vue.add(barre, gbc);
-			
-			JLabel titre = new JLabel("VOUS AVEZ GAGNÉ !!!");
-			Font font = new Font("Helvetica", Font.BOLD, 19); 
-			titre.setForeground(Color.WHITE);
-			titre.setFont(font);
-			titre.setHorizontalAlignment(JLabel.CENTER);
-			
-			gbc.fill = GridBagConstraints.HORIZONTAL;
-			gbc.gridy = 1;
-			this.vue.add(titre, gbc);
-			
-			// Ajouter un espace vertical (par exemple, un espace de 10 pixels) entre le label et le plateau
-			gbc.gridy = 2;
-			JPanel espace = new JPanel();
-			espace.setBackground(Color.black);
-			espace.setPreferredSize(new Dimension(1060, (900-30-titre.getHeight()-this.vuePlateau.getHeight())/4));
-			this.vue.add(espace, gbc);
+	    if (this.estGagnant() && niveau != 10) {
+	        afficherNiveauGagnant(niveau);
+	    } else if (this.estGagnant() && niveau == 10) {
+	        afficherTrophee();
+	    }
+	}
+	
+	
+	
+	public void afficherNiveauGagnant(int niveau) {
+	    nettoyerVue();
+	    
+	    JPanel barre = this.vue.creerBarreGagne();
+	    GridBagConstraints gbc = new GridBagConstraints();
+	    gbc.fill = GridBagConstraints.HORIZONTAL;
+	    gbc.gridx = 0;
+	    gbc.gridy = 0; // Placer la barre en haut
+	    this.vue.add(barre, gbc);
 
-			// Ajouter le plateau au milieu
-			gbc.gridy = 3;
-			this.vue.add(this.vuePlateau, gbc);
-			
-			this.vue.revalidate();
-			this.vue.repaint();
-			
-			SwingUtilities.invokeLater(() -> {
-				for (int k = 0; k < (this.modelePlateau.getHauteur()+2)*(this.modelePlateau.getLargeur()+2); k++) {
-					VueCase c = (VueCase) this.vuePlateau.getComponent(k);
-					if(c.getPosX() != -1) {
-						c.rendreNonCliquable();
-					}
-	        	}
-				this.vue.revalidate();
-				this.vue.repaint();
-			});
-			
-		}
+	    ajouterEspace(60, 1);
+
+	    afficherNiveau(niveau);
+
+	    // Ajouter un espace vertical entre le niveau et le plateau
+	    ajouterEspace((900 - (30 + 60) - this.vuePlateau.getHeight()) / 8, 3);
+
+	    ajouterPlateau();
+
+	    // Ajouter un espace vertical entre le plateau et l'image
+	    ajouterEspace(10, 5);
+
+	    JLabel titre = creerLabel("VOUS AVEZ GAGNÉ !!!", 19, Color.WHITE, JLabel.CENTER);
+	    ajouterComposant(titre, 6);
+
+	    ajouterImage("medaille.png", 80, 80, 7);
+
+	    mettreAJourVue();
+	}
+
+	
+	public void afficherTrophee() {
+	    nettoyerVue();
+
+	    JPanel barre = this.vue.creerBarreGagne();
+	    GridBagConstraints gbc = new GridBagConstraints();
+	    gbc.fill = GridBagConstraints.HORIZONTAL;
+	    gbc.gridx = 0;
+	    gbc.gridy = 0; // Placer la barre en haut
+	    this.vue.add(barre, gbc);
+
+	    // Ajouter un espace vertical entre la barre et le trophée
+	    ajouterEspace(60, 1);
+	    
+	    JLabel bravo = creerLabel("BRAVO VOUS AVEZ FINI LE JEU !", 25, Color.WHITE, JLabel.CENTER);
+	    ajouterComposant(bravo, 2);
+	    
+	    ajouterEspace(80, 3);
+
+	    ajouterImage("trophee.png", 350, 350, 4);
+	    
+	    ajouterEspace(80, 5);
+	    
+
+	    JLabel champion = creerLabel("VOUS ÊTES UN CHAMPION DU JEU PLUMBER !!!", 25, Color.WHITE, JLabel.CENTER);
+	    ajouterComposant(champion, 6);
+
+	    // Mettre à jour la vue
+	    mettreAJourVue();
+	}	
+	
+	
+	private void nettoyerVue() {
+	    this.vue.removeAll();
+	    this.vue.revalidate();
+	    this.vue.repaint();
+	}
+
+	private void ajouterEspace(int hauteur, int gridY) {
+	    JPanel espace = creerEspaceVertical(hauteur);
+	    GridBagConstraints gbc = new GridBagConstraints();
+	    gbc.fill = GridBagConstraints.HORIZONTAL;
+	    gbc.gridy = gridY;
+	    this.vue.add(espace, gbc);
+	}
+
+	private JPanel creerEspaceVertical(int hauteur) {
+	    JPanel espace = new JPanel();
+	    espace.setBackground(Color.black);
+	    espace.setPreferredSize(new Dimension(1060, hauteur));
+	    return espace;
+	}
+
+	private void afficherNiveau(int niveau) {
+	    JLabel niveauLabel = creerLabel("Niveau " + niveau, 30, Color.WHITE, JLabel.CENTER);
+	    ajouterComposant(niveauLabel, 2);
+	}
+
+	private void ajouterPlateau() {
+	    ajouterComposant(this.vuePlateau, 4);
+	}
+
+	private JLabel creerLabel(String texte, int taillePolice, Color couleur, int alignement) {
+	    JLabel label = new JLabel(texte);
+	    label.setFont(new Font("Helvetica", Font.BOLD, taillePolice));
+	    label.setForeground(couleur);
+	    label.setHorizontalAlignment(alignement);
+	    return label;
+	}
+
+	private void ajouterComposant(Component composant, int gridY) {
+	    GridBagConstraints gbc = new GridBagConstraints();
+	    gbc.fill = GridBagConstraints.HORIZONTAL;
+	    gbc.gridy = gridY;
+	    this.vue.add(composant, gbc);
+	}
+
+	private void ajouterImage(String cheminImage, int largeur, int hauteur, int gridY) {
+	    ImageIcon imageIcon = createImageIcon(cheminImage);
+	    if (imageIcon != null) {
+	        imageIcon = new ImageIcon(imageIcon.getImage().getScaledInstance(largeur, hauteur, Image.SCALE_DEFAULT));
+	        JLabel imageLabel = new JLabel(imageIcon);
+	        ajouterComposant(imageLabel, gridY);
+	    }
+	}
+
+	private void mettreAJourVue() {
+	    this.vue.revalidate();
+	    this.vue.repaint();
 	}
 	
 	//renvoie true si la case est allumee
@@ -137,4 +228,13 @@ public class Controleur {
             if(c.getPosX() !=-1) c.miseAJour();
         }
 	}
+	
+	public ImageIcon createImageIcon(String path) {
+        try {
+            return new ImageIcon(ImageIO.read(new File(path)));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

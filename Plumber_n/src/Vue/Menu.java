@@ -31,23 +31,29 @@ public class Menu extends JPanel {
 
         // Charger l'image du plombier
         ImageIcon plumberIcon = createImageIcon("plumber.png");
-        plumberIcon = new ImageIcon(plumberIcon.getImage().getScaledInstance(300, 300, Image.SCALE_DEFAULT));
+        plumberIcon = new ImageIcon(plumberIcon.getImage().getScaledInstance(400, 400, Image.SCALE_DEFAULT));
         JLabel plumberLabel = new JLabel(plumberIcon);
 
-        // Center plumberLabel both horizontally and vertically
+        // Centre l'image
         JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         centerPanel.setBackground(Color.BLACK);
         centerPanel.add(plumberLabel);
 
+        JLabel description = new JLabel("<html><center>Plumber est un jeu de puzzle dans lequel vous devez connecter les tuyaux pour former un chemin continu. Résolvez les niveaux en unissant tous les tuyaux pour gagner !<br>Bonne chance :) </center></html>");
+        description.setFont(new Font("Times New Roman", Font.ITALIC, 20)); 
+        description.setAlignmentX(Component.CENTER_ALIGNMENT);
+        description.setForeground(Color.GRAY);
+        
         add(Box.createRigidArea(new Dimension(0, 20)));
         add(title);
-        add(Box.createRigidArea(new Dimension(0, 30))); // Add some space between title and image
+        add(Box.createRigidArea(new Dimension(0, 60))); // Add some space between title and image
         add(centerPanel);
-        add(Box.createRigidArea(new Dimension(0, 20)));
+        add(Box.createRigidArea(new Dimension(0, 10)));
+        add(description);
 
         JButton startButton = new JButton("Commencer le jeu");
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        startButton.setFont(new Font("Arial", Font.PLAIN, 18));
+        startButton.setFont(new Font("Arial", Font.PLAIN, 23));
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Lorsque le bouton "Commencer le jeu" est cliqué, appeler la méthode pour mettre à jour le contenu dans VuePlateau
@@ -56,7 +62,7 @@ public class Menu extends JPanel {
 
         JButton quitButton = new JButton("Quitter");
         quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        quitButton.setFont(new Font("Arial", Font.PLAIN, 18));
+        quitButton.setFont(new Font("Arial", Font.PLAIN, 20));
         quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -74,7 +80,7 @@ public class Menu extends JPanel {
         add(buttonBox);
     }
 
-    private ImageIcon createImageIcon(String path) {
+    public ImageIcon createImageIcon(String path) {
         try {
             return new ImageIcon(ImageIO.read(new File(path)));
         } catch (IOException e) {
