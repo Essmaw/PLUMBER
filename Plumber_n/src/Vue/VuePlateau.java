@@ -199,7 +199,7 @@ public class VuePlateau extends JPanel{
 		gbc.gridy = 1;
 		JPanel espace = new JPanel();
 		espace.setBackground(Color.black);
-		espace.setPreferredSize(new Dimension(1060, (900-30-plateau.getHeight())/8));
+		espace.setPreferredSize(new Dimension(1060, 10));
 		this.add(espace, gbc);
 
 		// Ajouter le plateau au milieu
@@ -231,8 +231,7 @@ public class VuePlateau extends JPanel{
 		
 		this.niveau+=1;
 		this.ficNiveau = "Fichier/pipe" + niveau + ".p";
-		this.controleur = new Controleur(this, this.plateau, this.ficNiveau, true, this.frame);
-		
+		this.controleur = new Controleur(this, this.plateau, ficNiveau, true, this.frame);
 	}
 	
 	public int getNiveau() {

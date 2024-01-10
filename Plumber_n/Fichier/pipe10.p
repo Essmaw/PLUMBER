@@ -1,6 +1,6 @@
-5 3
-E2 T1 E3 
-L0 F0 E3 
-T0 C0 T2 
-T1 F2 L0 
-E0 E0 E0 
+5 6
+E1 L1 T2 T1 T2 \. 
+\. \. F0 T3 T0 T2 
+E1 L1 C0 T2 E2 L0 
+E2 \. L0 F0 F2 E0 
+T0 L1 T3 E0 T0 E3 

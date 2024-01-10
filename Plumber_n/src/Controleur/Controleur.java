@@ -130,7 +130,6 @@ public class Controleur {
 		return true;
 	}
 	
-	
 	public int retour() {
 	    int [] pos = this.modelePlateau.retour();
 	    if(pos != null) {
@@ -147,8 +146,7 @@ public class Controleur {
 	    return -1;
 	}
 	
-	
-	
+
 	public void afficherNiveauGagnant(int niveau) {
 	    nettoyerVue();
 	    
@@ -164,7 +162,7 @@ public class Controleur {
 	    afficherNiveau(niveau);
 
 	    // Ajouter un espace vertical entre le niveau et le plateau
-	    ajouterEspace((900 - (30 + 60) - this.vuePlateau.getHeight()) / 8, 3);
+	    ajouterEspace(10, 3);
 
 	    ajouterPlateau();
 
@@ -202,11 +200,9 @@ public class Controleur {
 	    
 	    ajouterEspace(80, 5);
 	    
-
 	    JLabel champion = creerLabel("VOUS ÊTES UN CHAMPION DU JEU PLUMBER !!!", 25, Color.WHITE, JLabel.CENTER);
 	    ajouterComposant(champion, 6);
 
-	    // Mettre à jour la vue
 	    mettreAJourVue();
 	}	
 	
