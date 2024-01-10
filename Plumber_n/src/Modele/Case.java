@@ -4,9 +4,14 @@ public class Case {
 	// ATRIBUTS 
 	protected Tuyau tuyau;
 	protected int orientation; // nombre de rotation réalisée sur la config initiale du tuyau.
-	protected boolean est_allume = false;
+	protected boolean estAllume = false;
+	protected boolean estVide = false; //par defaut une case n'est pas vide, elle contient un tuyau
 	
 	// CONSTRUCTEUR
+	Case(){
+		this.estVide = true;
+	}
+	
 	Case(Tuyau tuyau, int orientation){
 		this.tuyau = tuyau;
 		this.orientation = orientation ;
@@ -14,7 +19,11 @@ public class Case {
 	
 	// ACCESSEURS
 	public boolean getEstAllume() {
-		return this.est_allume;
+		return this.estAllume;
+	}
+	
+	public boolean getEstVide() {
+		return this.estVide;
 	}
 	
 	public Tuyau getTuyau() {
@@ -28,7 +37,7 @@ public class Case {
 	// FONCTIONS
 	void rotation() {this.orientation= (this.orientation + 1) % 4;}
 	
-	void setAllumer(boolean allumer) {this.est_allume = allumer;}
+	void setAllumer(boolean allumer) {this.estAllume = allumer;}
 	
 	boolean estConnecte(Case voisine, Dir dir) {
 		Dir orientationCaseCourante = Dir.values()[this.orientation];

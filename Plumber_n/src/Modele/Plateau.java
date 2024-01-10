@@ -41,8 +41,9 @@ public class Plateau {
 	public boolean estGagnant() {
 		for(int i=0; i < hauteur; i++) {
 			for(int j=0; j < largeur; j++) { 
-				Case courante = plateau[i][j]; //recupere case voisine
-				if(!courante.est_allume) return false;
+				Case courante = plateau[i][j]; //recupere case
+				if(courante.estVide) continue; //si case courante vide, passer a l'iteration suivante
+				if(!courante.estAllume) return false;
 				for(Dir dir : Dir.values()) {
 					if(courante.tuyau.estOuvert(dir, Dir.values()[courante.orientation])){
 						int iVoisin = i + Dir.di[dir.ordinal()];
@@ -50,6 +51,8 @@ public class Plateau {
 						//regarder si case dans le plateau
 						if(iVoisin >= 0 && iVoisin < hauteur && jVoisin >= 0 && jVoisin < largeur) {
 							Case voisine = plateau[iVoisin][jVoisin]; //recupere case voisine
+							//si ouvert vers une case vide alors retourner fuite
+							if(voisine.estVide) return false;
 							//regarder si case pas allumee et source connecte avec case voisine dans direction dir
 							if(! courante.estConnecte(voisine, dir)) {
 								return false; //fuite
@@ -71,17 +74,19 @@ public class Plateau {
 	
 	public void propagation(int i, int j) { 
 		Case courante = plateau[i][j]; //recupere case voisine
-		courante.setAllumer(true); // on allume la case courante car appel a propagation que si pas allume
-		for(Dir dir : Dir.values()) {
-			if(courante.tuyau.estOuvert(dir, Dir.values()[courante.orientation])){
-				int iVoisin = i + Dir.di[dir.ordinal()];
-				int jVoisin = j + Dir.dj[dir.ordinal()];
-				//regarder si case dans le plateau
-				if(iVoisin >= 0 && iVoisin < hauteur && jVoisin >= 0 && jVoisin < largeur) {
-					Case voisine = plateau[iVoisin][jVoisin]; //recupere case voisine
-					//regarder si case pas allumee et source connecte avec case voisine dans direction dir
-					if(! voisine.est_allume && courante.estConnecte(voisine, dir)) {
-						propagation(iVoisin, jVoisin); //propager le signal
+		if(!courante.estVide) { //verifier que la case n'est pas vide
+			courante.setAllumer(true); // on allume la case courante car appel a propagation que si pas allume
+			for(Dir dir : Dir.values()) {
+				if(courante.tuyau.estOuvert(dir, Dir.values()[courante.orientation])){
+					int iVoisin = i + Dir.di[dir.ordinal()];
+					int jVoisin = j + Dir.dj[dir.ordinal()];
+					//regarder si case dans le plateau
+					if(iVoisin >= 0 && iVoisin < hauteur && jVoisin >= 0 && jVoisin < largeur) {
+						Case voisine = plateau[iVoisin][jVoisin]; //recupere case voisine
+						//regarder si case pas allumee et source connecte avec case voisine dans direction dir
+						if(!voisine.estVide && ! voisine.estAllume && courante.estConnecte(voisine, dir)) {
+							propagation(iVoisin, jVoisin); //propager le signal
+						}
 					}
 				}
 			}
@@ -89,18 +94,21 @@ public class Plateau {
 	}
 
 	public void rotation(int i, int j) {
-		this.plateau[i][j].orientation = (this.plateau[i][j].orientation + 1)%4;
-		//eteindre toutes les cases 
-		for(Case[] ligne : plateau) {
-			for(Case casePlateau : ligne) {
-				casePlateau.setAllumer(false);
+		Case courante = this.plateau[i][j];
+		if(!courante.estVide) {
+			courante.orientation = (this.plateau[i][j].orientation + 1)%4;
+			//eteindre toutes les cases 
+			for(Case[] ligne : plateau) {
+				for(Case casePlateau : ligne) {
+					casePlateau.setAllumer(false);
+				}
 			}
+			//et on recalcule la propagation a partir de la source
+			this.initSource();
+			//on ajoute les positions de la cases dans sauvegarde
+			int[] pos = {i, j};
+			this.sauvegarde.add(pos);
 		}
-		//et on recalcule la propagation a partir de la source
-		this.initSource();
-		//on ajoute les positions de la cases dans sauvegarde
-		int[] pos = {i, j};
-		this.sauvegarde.add(pos);
 	}
 	
 	public int[] retour() {
@@ -128,13 +136,15 @@ public class Plateau {
 		Random r = new Random();
 		for(Case[] ligne : this.plateau) {
 			for(Case c : ligne) {
-				int rot = r.nextInt(4);
-				//on tire aléatoirement la nouvelle rotation tant qu'elle
-				//égale à la rotation initale
-				while(rot == c.orientation) { 
-					rot = r.nextInt(4);
+				if(!c.estVide) {
+					int rot = r.nextInt(4);
+					//on tire aléatoirement la nouvelle rotation tant qu'elle
+					//égale à la rotation initale
+					while(rot == c.orientation) { 
+						rot = r.nextInt(4);
+					}
+					c.orientation = rot;
 				}
-				c.orientation = rot;
 			}
 		}
 	}
@@ -144,18 +154,26 @@ public class Plateau {
 		String result = this.hauteur+" "+this.largeur+"\n";
 		for(int i=0; i<this.hauteur; i++) {
 			for(int j=0; j<this.largeur; j++) {
-				result += Tuyau.tuyauToString((this.plateau[i][j]).tuyau);
-				result += (this.plateau[i][j]).orientation;
-				if(this.plateau[i][j].est_allume) {
-					result += "* ";
+				Case courante = this.plateau[i][j];
+				if(courante.estVide) {
+					result += ". ";
 				}
-				else result += "- ";
+				else {
+					result += Tuyau.tuyauToString((courante).tuyau);
+					result += (courante).orientation;
+					if(courante.estAllume) {
+						result += "* ";
+					}
+					else result += "- ";
+				}
 			}
 			result += "\n";
 		}
 		return result;
 	}
 	
+	//test du Modele
+	/*
 	public static void main(String[] arg) {
 		//initialisation du plateau
 		Plateau p = new Plateau();
@@ -168,8 +186,8 @@ public class Plateau {
 		System.out.println(p);
 		
 		//rotation aléatoire 
-		//p.rotation_aleatoire();
-		//System.out.println(p);
+		p.rotation_aleatoire();
+		System.out.println(p);
 		
 		//propagation a partir de la source pour initaliser
 		p.initSource();
@@ -178,10 +196,9 @@ public class Plateau {
 		
 		
 		//rotation d'un tuyau
-		//p.rotation(3, 1);
-		//System.out.println(p);
-		//System.out.println(p.est_gagnant());
+		p.rotation(3, 1);
+		System.out.println(p);
+		System.out.println(p.estGagnant());
 		
-	}
-	
+	}*/
 }

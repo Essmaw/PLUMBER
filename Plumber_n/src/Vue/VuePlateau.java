@@ -33,44 +33,7 @@ public class VuePlateau extends JPanel{
 		this.niveau = niveau;
 		this.frame = frame;
 		this.ficNiveau = ficNiveau;
-		this.plateau = new JPanel();
-		plateau.setBackground(Color.black);
-		this.setBackground(Color.black);
-		
-		this.setPreferredSize(new Dimension(1060, 900));
-		JPanel barre = creerBarre();
-
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.gridx = 0;
-		gbc.gridy = 0; // Changer gridy à 0 pour placer le label en haut
-		this.add(barre, gbc);
-		
-		gbc.gridy = 1;
-	    JPanel espaceBarreNiveau = new JPanel();
-	    espaceBarreNiveau.setBackground(Color.black);
-	    espaceBarreNiveau.setPreferredSize(new Dimension(1060, 60));
-	    this.add(espaceBarreNiveau, gbc);
-	    
-		gbc.gridy = 2;
-        JLabel niveauLabel = new JLabel("Niveau " + niveau);
-        Font font = new Font("Helvetica", Font.BOLD, 30);
-        niveauLabel.setForeground(Color.WHITE);
-        niveauLabel.setFont(font);
-        niveauLabel.setHorizontalAlignment(JLabel.CENTER);
-        this.add(niveauLabel, gbc);
-        
-		// Ajouter un espace vertical (par exemple, un espace de 10 pixels) entre le label et le plateau
-		gbc.gridy = 3;
-		//gbc.insets = new Insets(10, 0, 0, 0);
-		JPanel espace = new JPanel();
-		espace.setBackground(Color.black);
-		espace.setPreferredSize(new Dimension(1060, (900-30-plateau.getHeight())/8));
-		this.add(espace, gbc);
-
-		// Ajouter le plateau au milieu
-		gbc.gridy = 4;
-		this.add(plateau, gbc);
+		this.afficher();
 		
 		this.controleur = new Controleur(this, this.plateau, ficNiveau, true);
 		
@@ -84,55 +47,13 @@ public class VuePlateau extends JPanel{
 		
 		barre.setLayout(new GridLayout(1, 3));
 		
-		JButton menu = new JButton("Menu");
-		menu.setFont(new Font("Arial", Font.PLAIN, 20));
-		barre.add(menu);
+		this.creerBoutonMenu(barre);
 		
-		ActionListener l2 = new ActionListener() {
-			public void actionPerformed (ActionEvent e) {
-				// code de la reponse a une action.
-				menu();
-			}
-		};
-		menu.addActionListener(l2);
+		this.creerBoutonRetour(barre);
 		
-		//bouton retour 
-		JButton retour = new JButton("Retour");
-		retour.setFont(new Font("Arial", Font.PLAIN, 20));
-		barre.add(retour);
-		
-		ActionListener l4 = new ActionListener() {
-			public void actionPerformed (ActionEvent e) {
-				// code de la reponse a une action.
-				retour();
-			}
-		};
-		retour.addActionListener(l4);
-		
-		
-		JButton recommencer = new JButton("Recommencer");
-		recommencer.setFont(new Font("Arial", Font.PLAIN, 20));
-		barre.add(recommencer);
-		
-		ActionListener l1 = new ActionListener() {
-			public void actionPerformed (ActionEvent e) {
-				// code de la reponse a une action.
-				recommencer();
-			}
-		};
-		recommencer.addActionListener(l1);
-		
-		JButton solution = new JButton("Solution");
-		solution.setFont(new Font("Arial", Font.PLAIN, 20));
-		barre.add(solution);
-		
-		ActionListener l3 = new ActionListener() {
-			public void actionPerformed (ActionEvent e) {
-				// code de la reponse a une action.
-				solution();
-			}
-		};
-		solution.addActionListener(l3);
+		this.creerBoutonRecommencer(barre);
+
+		this.creerBoutonSolution(barre);
 		
 		return barre;
 	}
@@ -148,6 +69,18 @@ public class VuePlateau extends JPanel{
 		}
 		else barre.setLayout(new GridLayout(1, 3));
 		
+		this.creerBoutonMenu(barre);
+		
+		this.creerBoutonRecommencer(barre);
+		
+		if(this.niveau < nbMaxNiveaux) { // 9 = nombre max de niveau
+			this.creerBoutonSuivant(barre);
+		}
+		
+		return barre;
+	}
+	
+	public void creerBoutonMenu(JPanel barre) {
 		JButton menu = new JButton("Menu");
 		menu.setFont(new Font("Arial", Font.PLAIN, 20));
 		barre.add(menu);
@@ -159,8 +92,9 @@ public class VuePlateau extends JPanel{
 			}
 		};
 		menu.addActionListener(l2);
-		
-		
+	}
+	
+	public void creerBoutonRecommencer(JPanel barre) {
 		JButton recommencer = new JButton("Recommencer");
 		recommencer.setFont(new Font("Arial", Font.PLAIN, 20));
 		barre.add(recommencer);
@@ -172,22 +106,49 @@ public class VuePlateau extends JPanel{
 			}
 		};
 		recommencer.addActionListener(l1);
+	}
+	
+	public void creerBoutonSuivant(JPanel barre) {
+		JButton suivant = new JButton("Niveau suivant");
+		suivant.setFont(new Font("Arial", Font.PLAIN, 20));
+		barre.add(suivant);
 		
-		if(this.niveau < nbMaxNiveaux) { // 9 = nombre max de niveau
-			JButton suivant = new JButton("Niveau suivant");
-			suivant.setFont(new Font("Arial", Font.PLAIN, 20));
-			barre.add(suivant);
-			
-			ActionListener l3 = new ActionListener() {
-				public void actionPerformed (ActionEvent e) {
-					// code de la reponse a une action.
-					suivant();
-				}
-			};
-			suivant.addActionListener(l3);
-		}
+		ActionListener l3 = new ActionListener() {
+			public void actionPerformed (ActionEvent e) {
+				// code de la reponse a une action.
+				suivant();
+			}
+		};
+		suivant.addActionListener(l3);
+	}
+	
+	public void creerBoutonRetour(JPanel barre) {
+		//bouton retour 
+		JButton retour = new JButton("Retour");
+		retour.setFont(new Font("Arial", Font.PLAIN, 20));
+		barre.add(retour);
 		
-		return barre;
+		ActionListener l4 = new ActionListener() {
+			public void actionPerformed (ActionEvent e) {
+				// code de la reponse a une action.
+				retour();
+			}
+		};
+		retour.addActionListener(l4);
+	}
+	
+	public void creerBoutonSolution(JPanel barre) {
+		JButton solution = new JButton("Solution");
+		solution.setFont(new Font("Arial", Font.PLAIN, 20));
+		barre.add(solution);
+		
+		ActionListener l3 = new ActionListener() {
+			public void actionPerformed (ActionEvent e) {
+				// code de la reponse a une action.
+				solution();
+			}
+		};
+		solution.addActionListener(l3);
 	}
 	
 	public void menu() {
@@ -203,189 +164,70 @@ public class VuePlateau extends JPanel{
 	    frame.getContentPane().add(menu);
 	}
 	
+	public void afficher() {
+		this.plateau = new JPanel();
+		this.removeAll();
+		this.revalidate();
+		this.repaint();
+		
+		this.setBackground(Color.black);
+		
+		this.setPreferredSize(new Dimension(1060, 900));
+		JPanel barre = creerBarre();
+
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridx = 0;
+		gbc.gridy = 0; // Changer gridy à 0 pour placer le label en haut
+		this.add(barre, gbc);
+        
+		gbc.gridy = 1;
+	    JPanel espaceBarreNiveau = new JPanel();
+	    espaceBarreNiveau.setBackground(Color.black);
+	    espaceBarreNiveau.setPreferredSize(new Dimension(1060, 60));
+	    this.add(espaceBarreNiveau, gbc);
+	    
+		gbc.gridy = 2;
+        JLabel niveauLabel = new JLabel("Niveau " + niveau);
+        Font font = new Font("Helvetica", Font.BOLD, 30);
+        niveauLabel.setForeground(Color.WHITE);
+        niveauLabel.setFont(font);
+        niveauLabel.setHorizontalAlignment(JLabel.CENTER);
+        this.add(niveauLabel, gbc);
+        
+        //inserer espace
+		gbc.gridy = 1;
+		JPanel espace = new JPanel();
+		espace.setBackground(Color.black);
+		espace.setPreferredSize(new Dimension(1060, (900-30-plateau.getHeight())/8));
+		this.add(espace, gbc);
+
+		// Ajouter le plateau au milieu
+		gbc.gridy = 1;
+		this.add(plateau, gbc);
+	}
+	
 	public void retour() {
 		int r = this.controleur.retour();
 		
 		if(r == 1) {
-			this.plateau = new JPanel();
-			this.removeAll();
-			this.revalidate();
-			this.repaint();
-			
-			this.setBackground(Color.black);
-			
-			this.setPreferredSize(new Dimension(1060, 900));
-			JPanel barre = creerBarre();
-	
-			GridBagConstraints gbc = new GridBagConstraints();
-			gbc.fill = GridBagConstraints.HORIZONTAL;
-			gbc.gridx = 0;
-			gbc.gridy = 0; // Changer gridy à 0 pour placer le label en haut
-			this.add(barre, gbc);
-	        
-			gbc.gridy = 1;
-		    JPanel espaceBarreNiveau = new JPanel();
-		    espaceBarreNiveau.setBackground(Color.black);
-		    espaceBarreNiveau.setPreferredSize(new Dimension(1060, 60));
-		    this.add(espaceBarreNiveau, gbc);
-		    
-			gbc.gridy = 2;
-	        JLabel niveauLabel = new JLabel("Niveau " + niveau);
-	        Font font = new Font("Helvetica", Font.BOLD, 30);
-	        niveauLabel.setForeground(Color.WHITE);
-	        niveauLabel.setFont(font);
-	        niveauLabel.setHorizontalAlignment(JLabel.CENTER);
-	        this.add(niveauLabel, gbc);
-	        
-	        //inserer espace
-			gbc.gridy = 1;
-			JPanel espace = new JPanel();
-			espace.setBackground(Color.black);
-			espace.setPreferredSize(new Dimension(1060, (900-30-plateau.getHeight())/8));
-			this.add(espace, gbc);
-	
-			// Ajouter le plateau au milieu
-			gbc.gridy = 1;
-			this.add(plateau, gbc);
+			this.afficher();
 			this.controleur = new Controleur(this, this.plateau, ficNiveau, true, this.controleur);
 		}
 	}
 	
 	public void solution() {
-		this.removeAll();
-		this.revalidate();
-		this.repaint();
-		this.plateau = new JPanel();
-		
-		this.setBackground(Color.black);
-		
-		this.setPreferredSize(new Dimension(1060, 900));
-		JPanel barre = creerBarre();
-
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.gridx = 0;
-		gbc.gridy = 0; // Changer gridy à 0 pour placer le label en haut
-		this.add(barre, gbc);
-        
-		gbc.gridy = 1;
-	    JPanel espaceBarreNiveau = new JPanel();
-	    espaceBarreNiveau.setBackground(Color.black);
-	    espaceBarreNiveau.setPreferredSize(new Dimension(1060, 60));
-	    this.add(espaceBarreNiveau, gbc);
-	    
-		gbc.gridy = 2;
-        JLabel niveauLabel = new JLabel("Niveau " + niveau);
-        Font font = new Font("Helvetica", Font.BOLD, 30);
-        niveauLabel.setForeground(Color.WHITE);
-        niveauLabel.setFont(font);
-        niveauLabel.setHorizontalAlignment(JLabel.CENTER);
-        this.add(niveauLabel, gbc);
-        
-		// Ajouter un espace vertical (par exemple, un espace de 10 pixels) entre le label et le plateau
-		gbc.gridy = 1;
-		//gbc.insets = new Insets(10, 0, 0, 0);
-		JPanel espace = new JPanel();
-		espace.setBackground(Color.black);
-		espace.setPreferredSize(new Dimension(1060, (900-30-plateau.getHeight())/8));
-		this.add(espace, gbc);
-
-		// Ajouter le plateau au milieu
-		gbc.gridy = 1;
-		this.add(plateau, gbc);
-		
+		this.afficher();
 		this.controleur = new Controleur(this, this.plateau, ficNiveau, false);
 	}
 	
 	public void recommencer() {
-		this.removeAll();
-		this.revalidate();
-		this.repaint();
-		this.plateau = new JPanel();
-		
-		this.setBackground(Color.black);
-		
-		this.setPreferredSize(new Dimension(1060, 900));
-		JPanel barre = creerBarre();
-
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.gridx = 0;
-		gbc.gridy = 0; // Changer gridy à 0 pour placer le label en haut
-		this.add(barre, gbc);
-		
-		gbc.gridy = 1;
-	    JPanel espaceBarreNiveau = new JPanel();
-	    espaceBarreNiveau.setBackground(Color.black);
-	    espaceBarreNiveau.setPreferredSize(new Dimension(1060, 60));
-	    this.add(espaceBarreNiveau, gbc);
-	    
-		gbc.gridy = 2;
-        JLabel niveauLabel = new JLabel("Niveau " + niveau);
-        Font font = new Font("Helvetica", Font.BOLD, 30);
-        niveauLabel.setForeground(Color.WHITE);
-        niveauLabel.setFont(font);
-        niveauLabel.setHorizontalAlignment(JLabel.CENTER);
-        this.add(niveauLabel, gbc);
-        
-		// Ajouter un espace vertical (par exemple, un espace de 10 pixels) entre le label et le plateau
-		gbc.gridy = 1;
-		//gbc.insets = new Insets(10, 0, 0, 0);
-		JPanel espace = new JPanel();
-		espace.setBackground(Color.black);
-		espace.setPreferredSize(new Dimension(1060, (900-30-plateau.getHeight())/8));
-		this.add(espace, gbc);
-
-		// Ajouter le plateau au milieu
-		gbc.gridy = 1;
-		this.add(plateau, gbc);
-		
+		this.afficher();
 		this.controleur = new Controleur(this, this.plateau, ficNiveau, true);
 	}
 	
 	public void suivant() {
-		
-		this.removeAll();
-		this.revalidate();
-		this.repaint();
-		this.plateau = new JPanel();
-		
-		this.setBackground(Color.black);
-		
-		this.setPreferredSize(new Dimension(1060, 900));
-		JPanel barre = creerBarre();
-
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.gridx = 0;
-		gbc.gridy = 0; // Changer gridy à 0 pour placer le label en haut
-		this.add(barre, gbc);
-		
-		gbc.gridy = 1;
-	    JPanel espaceBarreNiveau = new JPanel();
-	    espaceBarreNiveau.setBackground(Color.black);
-	    espaceBarreNiveau.setPreferredSize(new Dimension(1060, 60));
-	    this.add(espaceBarreNiveau, gbc);
-	    
-		gbc.gridy = 2;
-        JLabel niveauLabel = new JLabel("Niveau " + (niveau + 1));
-        Font font = new Font("Helvetica", Font.BOLD, 30);
-        niveauLabel.setForeground(Color.WHITE);
-        niveauLabel.setFont(font);
-        niveauLabel.setHorizontalAlignment(JLabel.CENTER);
-        this.add(niveauLabel, gbc);
-        
-		// Ajouter un espace vertical (par exemple, un espace de 10 pixels) entre le label et le plateau
-		gbc.gridy = 1;
-		//gbc.insets = new Insets(10, 0, 0, 0);
-		JPanel espace = new JPanel();
-		espace.setBackground(Color.black);
-		espace.setPreferredSize(new Dimension(1060, (900-30-plateau.getHeight())/8));
-		this.add(espace, gbc);
-
-		// Ajouter le plateau au milieu
-		gbc.gridy = 1;
-		this.add(plateau, gbc);
+		this.afficher();
 		
 		this.niveau+=1;
 		this.ficNiveau = "Fichier/pipe" + niveau + ".p";

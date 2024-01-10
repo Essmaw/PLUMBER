@@ -21,13 +21,20 @@ public class Parser {
 						System.exit(1);
 					}
 					String entree = sc.next();
-					Tuyau  t = Tuyau.stringToTuyau(entree.charAt(0));
-					int rotation = entree.charAt(1)-'0';
-					if( rotation > 3 || rotation < 0) {
-						System.out.println("Le fichier n'a pas le bon format.");
-						System.exit(1);
+					Case nvl_case;
+					if(entree.charAt(1) == '.') {
+						//alors case vide, ne contient pas de tuyau
+						nvl_case = new Case();
 					}
-					Case nvl_case = new Case(t, rotation);
+					else {
+						Tuyau  t = Tuyau.stringToTuyau(entree.charAt(0));
+						int rotation = entree.charAt(1)-'0';
+						if( rotation > 3 || rotation < 0) {
+							System.out.println("Le fichier n'a pas le bon format.");
+							System.exit(1);
+						}
+						nvl_case = new Case(t, rotation);
+					}
 					matrice[i][j] = nvl_case;
 				}
 			}

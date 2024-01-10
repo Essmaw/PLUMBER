@@ -45,6 +45,8 @@ public class Controleur {
 		this.vuePlateau = vuePlateau;
 		this.modelePlateau = new Plateau(Parser.lire(ficNiveau), aleatoire);
 		remplissagePlateau();
+	    this.miseAJourGagne();
+		
 	}
 	
 	public Controleur(VuePlateau vue, JPanel vuePlateau, String ficNiveau, boolean aleatoire, Controleur c2) {
@@ -52,6 +54,7 @@ public class Controleur {
 		this.vuePlateau = vuePlateau;
 		this.modelePlateau = c2.modelePlateau;
 		remplissagePlateau();
+		this.miseAJourGagne();
 	}
 	
 	public void remplissagePlateau() {
@@ -67,11 +70,16 @@ public class Controleur {
 			this.vuePlateau.add(new VueCase(80, 80, 2, 2, 3, -1, -1, this)); //-1 valeur par defaut
 			for(int j =0; j<this.modelePlateau.getLargeur(); j++) {
 				Case c = this.modelePlateau.getPlateau()[i][j];
-				char tuyau = Tuyau.tuyauToString(c.getTuyau()).charAt(0);
-				int rotation = c.getOrientation();
-				int ligne = 0;
-				if(c.getEstAllume()) ligne = 1;
-				this.vuePlateau.add(new VueCase(80, 80, ligne, Graphismes.TuyauToColonne(tuyau), rotation, i, j, this));
+				if(c.getEstVide()) {
+					this.vuePlateau.add(new VueCase(80, 80, 2, 0, 0, -1, -1, this));
+				}
+				else {
+					char tuyau = Tuyau.tuyauToString(c.getTuyau()).charAt(0);
+					int rotation = c.getOrientation();
+					int ligne = 0;
+					if(c.getEstAllume()) ligne = 1;
+					this.vuePlateau.add(new VueCase(80, 80, ligne, Graphismes.TuyauToColonne(tuyau), rotation, i, j, this));
+				}
 			}
 			this.vuePlateau.add(new VueCase(80, 80, 2, 2, 1, -1, -1, this));
 		}
@@ -91,9 +99,14 @@ public class Controleur {
 	public void rotation(int i, int j) {
 	    this.modelePlateau.rotation(i, j);
 	    this.vue.setBackground(Color.black);
-	    int niveau = vue.getNiveau();
-
-	    if (this.estGagnant() && niveau != 10) {
+	    
+	    this.miseAJourGagne();
+	}
+	
+	//si gagne mise a jour de l'affichage
+	public void miseAJourGagne(){
+		int niveau = vue.getNiveau();
+		if (this.estGagnant() && niveau != 10) {
 	        afficherNiveauGagnant(niveau);
 	    } else if (this.estGagnant() && niveau == 10) {
 	        afficherTrophee();

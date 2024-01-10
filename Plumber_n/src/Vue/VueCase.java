@@ -21,7 +21,6 @@ public class VueCase extends JPanel implements MouseInputListener{
 	private int ligne;
 	private int rotation;
 	private Graphismes graph;
-	private Graphics context_graph;
 	private Controleur controleur;
 	
 	public VueCase(int w, int h, int ligne, int col, int rotation, int posX, int posY, Controleur c){
@@ -44,18 +43,12 @@ public class VueCase extends JPanel implements MouseInputListener{
 		
 		this.image = graph.getTuyau(ligne, col, rotation);
 		
-		this.context_graph = this.image.getGraphics();//obligatoire?
-		
 		//rafraichis du panneau. Invoque la fonction paintCompoétant invoquée au premier affchage de la fenêtre, une image entièrement noire devrait apparaître dans celle-ci.nent
 		repaint();
 	}
 	
 	public int getPosX() {
 		return this.posX;
-	}
-	
-	public Graphics getImageGraphics() {
-		return this.context_graph;
 	}
 	
 	protected void paintComponent(Graphics g) {
@@ -80,7 +73,6 @@ public class VueCase extends JPanel implements MouseInputListener{
 	
 	public void caseRotation() {
 		if(this.posX != -1) {
-			this.context_graph.setColor(Color.BLACK);
 			this.rotation = (this.rotation + 1)%4;
 			this.controleur.rotation(this.posX, this.posY);
 			if(this.controleur.estAllume(this.posX, this.posY)) this.ligne = 1;
@@ -93,7 +85,6 @@ public class VueCase extends JPanel implements MouseInputListener{
 	
 	public void caseRotationInverse() {
 		if(this.posX != -1) {
-			this.context_graph.setColor(Color.BLACK);
 			this.rotation = (this.rotation - 1 + 4)%4;
 			this.controleur.rotation(this.posX, this.posY);
 			if(this.controleur.estAllume(this.posX, this.posY)) this.ligne = 1;
