@@ -234,6 +234,9 @@ public class Controleur {
 	}
 
 	private void ajouterPlateau() {
+		for(int i =0; i<(this.modelePlateau.getHauteur()+2)*(this.modelePlateau.getLargeur()+2); i++) {
+			((VueCase) this.vuePlateau.getComponent(i)).rendreNonCliquable();
+		}
 	    ajouterComposant(this.vuePlateau, 4);
 	}
 

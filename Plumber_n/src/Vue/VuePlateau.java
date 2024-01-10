@@ -33,7 +33,7 @@ public class VuePlateau extends JPanel{
 		this.niveau = niveau;
 		this.frame = frame;
 		this.ficNiveau = ficNiveau;
-		this.afficher();
+		this.afficher(false);
 		
 		this.controleur = new Controleur(this, this.plateau, ficNiveau, true, this.frame);
 		
@@ -164,7 +164,7 @@ public class VuePlateau extends JPanel{
 	    frame.getContentPane().add(menu);
 	}
 	
-	public void afficher() {
+	public void afficher(boolean estSuivant) {
 		this.plateau = new JPanel();
 		this.removeAll();
 		this.revalidate();
@@ -188,7 +188,10 @@ public class VuePlateau extends JPanel{
 	    this.add(espaceBarreNiveau, gbc);
 	    
 		gbc.gridy = 2;
-        JLabel niveauLabel = new JLabel("Niveau " + niveau);
+		JLabel niveauLabel;
+		if(estSuivant) niveauLabel = new JLabel("Niveau " + (niveau+1));
+		else niveauLabel = new JLabel("Niveau " + niveau);
+		
         Font font = new Font("Helvetica", Font.BOLD, 30);
         niveauLabel.setForeground(Color.WHITE);
         niveauLabel.setFont(font);
@@ -211,27 +214,29 @@ public class VuePlateau extends JPanel{
 		int r = this.controleur.retour();
 		
 		if(r == 1) {
-			this.afficher();
+			this.afficher(false);
 			this.controleur = new Controleur(this, this.plateau, ficNiveau, true, this.controleur, this.frame);
 		}
 	}
 	
 	public void solution() {
-		this.afficher();
+		this.afficher(false);
 		this.controleur = new Controleur(this, this.plateau, ficNiveau, false, this.frame);
 	}
 	
 	public void recommencer() {
-		this.afficher();
+		this.afficher(false);
 		this.controleur = new Controleur(this, this.plateau, ficNiveau, true, this.frame);
 	}
 	
 	public void suivant() {
-		this.afficher();
+		this.afficher(true);
 		
 		this.niveau+=1;
 		this.ficNiveau = "Fichier/pipe" + niveau + ".p";
 		this.controleur = new Controleur(this, this.plateau, ficNiveau, true, this.frame);
+		this.revalidate();
+		this.repaint();
 	}
 	
 	public int getNiveau() {
