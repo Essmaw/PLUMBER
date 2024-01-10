@@ -108,17 +108,28 @@ public class Controleur {
 	}
 	
 	//si gagne mise a jour de l'affichage
-	public void miseAJourGagne(){
+	public void miseAJourGagne() {
 		int niveau = vue.getNiveau();
 		
-		this.frame.getNiveauxGagnes()[niveau] = true;
+		this.frame.getNiveauxGagnes()[niveau - 1] = true;
 		
-		if (this.estGagnant() && niveau != 10) {
+		if (this.estGagnant() && !finirJeu()) {
 	        afficherNiveauGagnant(niveau);
-	    } else if (this.estGagnant() && niveau == 10) {
+	    }
+		
+		if (this.estGagnant() && finirJeu()) {
 	        afficherTrophee();
 	    }
 	}
+	
+	public boolean finirJeu() { 
+		boolean [] niveauxGagnes = this.frame.getNiveauxGagnes();
+		for (int i=0; i<niveauxGagnes.length;i++) {
+			if (!niveauxGagnes[i]) return false;
+		}
+		return true;
+	}
+	
 	
 	public int retour() {
 	    int [] pos = this.modelePlateau.retour();

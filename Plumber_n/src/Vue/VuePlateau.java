@@ -232,6 +232,7 @@ public class VuePlateau extends JPanel{
 		this.niveau+=1;
 		this.ficNiveau = "Fichier/pipe" + niveau + ".p";
 		this.controleur = new Controleur(this, this.plateau, this.ficNiveau, true, this.frame);
+		
 	}
 	
 	public int getNiveau() {
