@@ -27,15 +27,15 @@ public class VuePlateau extends JPanel{
 	private Controleur controleur;
 	private String ficNiveau;
 	private int niveau;
-	private JFrame frame;
+	private Jeu frame;
 	
-	public VuePlateau(int niveau, String ficNiveau, JFrame frame) {
+	public VuePlateau(int niveau, String ficNiveau, Jeu frame) {
 		this.niveau = niveau;
 		this.frame = frame;
 		this.ficNiveau = ficNiveau;
 		this.afficher();
 		
-		this.controleur = new Controleur(this, this.plateau, ficNiveau, true);
+		this.controleur = new Controleur(this, this.plateau, ficNiveau, true, this.frame);
 		
 	}
 	
@@ -212,18 +212,18 @@ public class VuePlateau extends JPanel{
 		
 		if(r == 1) {
 			this.afficher();
-			this.controleur = new Controleur(this, this.plateau, ficNiveau, true, this.controleur);
+			this.controleur = new Controleur(this, this.plateau, ficNiveau, true, this.controleur, this.frame);
 		}
 	}
 	
 	public void solution() {
 		this.afficher();
-		this.controleur = new Controleur(this, this.plateau, ficNiveau, false);
+		this.controleur = new Controleur(this, this.plateau, ficNiveau, false, this.frame);
 	}
 	
 	public void recommencer() {
 		this.afficher();
-		this.controleur = new Controleur(this, this.plateau, ficNiveau, true);
+		this.controleur = new Controleur(this, this.plateau, ficNiveau, true, this.frame);
 	}
 	
 	public void suivant() {
@@ -231,25 +231,11 @@ public class VuePlateau extends JPanel{
 		
 		this.niveau+=1;
 		this.ficNiveau = "Fichier/pipe" + niveau + ".p";
-		this.controleur = new Controleur(this, this.plateau, this.ficNiveau, true);
-		
+		this.controleur = new Controleur(this, this.plateau, this.ficNiveau, true, this.frame);
 	}
 	
 	public int getNiveau() {
 		return this.niveau;
 	}
 	
-	public static void main(String[] argv) {
-		//creation fenetre principale
-		JFrame frame = new JFrame("Plumber");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		// Création et ajout du menu à la fenêtre
-	    Menu menu = new Menu(frame);
-	    frame.getContentPane().add(menu);
-		
-		//ajustement de la fenetre aux dimensions de son panneau interne
-		frame.pack();
-		frame.setVisible(true);
-	}
 }

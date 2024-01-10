@@ -14,9 +14,9 @@ import javax.swing.JPanel;
 
 public class VueNiveaux extends JPanel {
 	
-	private JFrame frame;
+	private Jeu frame;
 	
-    public VueNiveaux(JFrame frame) {
+    public VueNiveaux(Jeu frame) {
         this.frame = frame;
         initUI();
     }
@@ -28,9 +28,14 @@ public class VueNiveaux extends JPanel {
         for (int i = 1; i <= 10; i++) {
             JButton niveauButton = new JButton("Niveau " + i);
             niveauButton.setFont(new Font("Arial", Font.PLAIN, 14));
-            niveauButton.setForeground(Color.WHITE);
             niveauButton.setBackground(Color.DARK_GRAY);
             niveauButton.addActionListener(new NiveauButtonListener(i, frame));
+            if (this.frame.getNiveauxGagnes()[i -1]) {
+            	niveauButton.setForeground(Color.GREEN);
+            } else {
+            	niveauButton.setForeground(Color.WHITE);
+            }
+            
             add(niveauButton);
         }
     }
@@ -38,9 +43,9 @@ public class VueNiveaux extends JPanel {
     // ActionListener pour les boutons de niveau
     private class NiveauButtonListener implements ActionListener {
         private int niveau;
-        private JFrame frame;
+        private Jeu frame;
 
-        public NiveauButtonListener(int niveau, JFrame frame) {
+        public NiveauButtonListener(int niveau, Jeu frame) {
         	this.frame = frame;
             this.niveau = niveau;
         }

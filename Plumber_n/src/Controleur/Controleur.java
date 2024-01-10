@@ -31,6 +31,7 @@ import Modele.Plateau;
 import Modele.Case;
 import Modele.Tuyau;
 import Vue.Graphismes;
+import Vue.Jeu;
 import Vue.VueCase;
 import Vue.VuePlateau;
 
@@ -39,19 +40,22 @@ public class Controleur {
 	private VuePlateau vue;
 	private JPanel vuePlateau;
 	private Plateau modelePlateau;
+	private Jeu frame;
 	
-	public Controleur(VuePlateau vue, JPanel vuePlateau, String ficNiveau, boolean aleatoire) {
+	public Controleur(VuePlateau vue, JPanel vuePlateau, String ficNiveau, boolean aleatoire, Jeu frame) {
 		this.vue = vue;
 		this.vuePlateau = vuePlateau;
+		this.frame = frame;
 		this.modelePlateau = new Plateau(Parser.lire(ficNiveau), aleatoire);
 		remplissagePlateau();
 	    this.miseAJourGagne();
 		
 	}
 	
-	public Controleur(VuePlateau vue, JPanel vuePlateau, String ficNiveau, boolean aleatoire, Controleur c2) {
+	public Controleur(VuePlateau vue, JPanel vuePlateau, String ficNiveau, boolean aleatoire, Controleur c2, Jeu frame) {
 		this.vue = vue;
 		this.vuePlateau = vuePlateau;
+		this.frame = frame;
 		this.modelePlateau = c2.modelePlateau;
 		remplissagePlateau();
 		this.miseAJourGagne();
@@ -106,6 +110,9 @@ public class Controleur {
 	//si gagne mise a jour de l'affichage
 	public void miseAJourGagne(){
 		int niveau = vue.getNiveau();
+		
+		this.frame.getNiveauxGagnes()[niveau] = true;
+		
 		if (this.estGagnant() && niveau != 10) {
 	        afficherNiveauGagnant(niveau);
 	    } else if (this.estGagnant() && niveau == 10) {

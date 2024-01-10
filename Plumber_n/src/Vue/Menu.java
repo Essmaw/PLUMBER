@@ -11,9 +11,9 @@ import java.io.File;
 
 public class Menu extends JPanel {
 
-    private JFrame frame;
+    private Jeu frame;
 
-    public Menu(JFrame frame) {
+    public Menu(Jeu frame) {
     	this.frame = frame;
         this.setPreferredSize(new Dimension(1060, 900));
         initUI();
