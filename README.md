@@ -25,8 +25,8 @@ tar -xvf fichier.tar
 4. Exécuter le projet (Run)
 
 ## Contributeurs
-- Essmay Touami (22313891)
-- Dounia Benyakhlaf ()
+- Essmay Touami
+- Dounia Benyakhlaf
 M1-BI
 
 
